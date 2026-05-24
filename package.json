@@ -1,0 +1,84 @@
+{
+  "name": "iris-code",
+  "version": "0.4.1",
+  "description": "Open-source premium GUI for Claude Code with parallel sub-agents and Telegram bridge.",
+  "main": "main.js",
+  "bin": {
+    "iris": "bin/iris.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "iris": "node bin/iris.js",
+    "test": "node tests/run-all.js",
+    "test:smoke": "node smoke-test.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win nsis --x64",
+    "dist:win:arm64": "electron-builder --win nsis --arm64",
+    "dist:dir": "electron-builder --dir"
+  },
+  "author": "The Iris Code Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.oorbitproductivity.iriscode",
+    "productName": "Iris Code",
+    "copyright": "Copyright (c) 2026 The Iris Code Contributors",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**/*",
+      "bin/**/*",
+      "app/**/*",
+      "!app/assets/icon-preview.html",
+      "!**/*.map",
+      "!**/.DS_Store",
+      "!**/Thumbs.db"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "${productName} Setup ${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Iris Code",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "app/assets/iris-icon.png",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "app/assets/iris-icon.png",
+      "category": "Development"
+    }
+  }
+}

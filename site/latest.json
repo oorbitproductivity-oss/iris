@@ -1,0 +1,17 @@
+{
+  "version": "0.4.0",
+  "released": "2026-05-23",
+  "windows": {
+    "x64": {
+      "url": "https://github.com/oorbitproductivity-oss/iris/releases/download/v0.4.0/Iris-Code-Setup-0.4.0.exe",
+      "size": 92750762,
+      "sha256": "7a309187c2c17d0dab58c7a6c9c80563c9a20b17e07de764e679c013c9c184a7"
+    },
+    "arm64": {
+      "url": "https://github.com/oorbitproductivity-oss/iris/releases/download/v0.4.0/Iris-Code-Setup-0.4.0-ARM64.exe",
+      "size": 91241462,
+      "sha256": "c271fd687c2f1a5f807b83963a7e506445c3fe54883580fef4a2ecff11c77d4d"
+    }
+  },
+  "changelog": "https://iris-code.pages.dev/download.html#changelog"
+}

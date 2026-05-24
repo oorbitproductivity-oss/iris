@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.4.1 — Windows spawn race fix
+
+Released 2026-05-24.
+
+**Bug fixes:**
+
+- **Fixed `claude exited with code -4058` on Windows.** When `claude` was installed via npm as `claude.cmd`, the first `spawn('claude', ..., { shell: false })` would fail with ENOENT (Node's CVE-2024-27980 mitigation refuses `.cmd` without shell). The retry path correctly reran with `shell: true`, but the dead first proc's async `close` event (libuv code `-4058` / UV_ENOENT) raced the retry and clobbered the live session with a bogus exit broadcast. Thanks to Riley for the detailed bug report.
+- **Resolve the `claude` binary upfront** via PATHEXT walk in `lib/agent-manager.js`. When the resolved path is a Windows `.cmd`/`.bat`, spawn with `shell: true` from the first attempt — bypasses the broken-spawn-then-retry path entirely.
+- **Stale-close guard** in `_onClose`. Even if the retry path somehow triggers, a close event from a proc that no longer matches `this.procs.get(id)` is now ignored with a warning instead of broadcasting a phantom exit code.
+- **Listeners detached on dead proc** before kicking off the retry, as belt-and-suspenders.
+
+**UX improvements:**
+
+- **Friendly preflight dialog** at app boot if the `claude` CLI is missing from PATH, with one-line install instructions and a button to open the docs.
+- **Clearer in-session error message** when spawn truly fails because the CLI isn't installed — replaces raw `ENOENT` / "not recognized as an internal or external command" with the npm install command and a docs link.
+
 ## v0.4.0 — Telegram Remote Agent
 
 Released 2026-05-23.

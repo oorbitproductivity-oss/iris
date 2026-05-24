@@ -13,7 +13,7 @@ Only the latest minor release receives security fixes. Right now that's **v0.4.x
 ## Reporting a vulnerability
 
 **Do not open a public GitHub issue for security reports.** Open a **private security advisory** at
-<https://github.com/oorbitproductivity-oss/iriscode/security/advisories/new> instead. Reports route directly to the maintainers and stay confidential until coordinated disclosure.
+<https://github.com/oorbitproductivity-oss/iris/security/advisories/new> instead. Reports route directly to the maintainers and stay confidential until coordinated disclosure.
 
 Include:
 

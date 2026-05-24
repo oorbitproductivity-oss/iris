@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/oorbitproductivity-oss/iris/discussions
+    about: Long-form questions, workflow ideas, show-and-tell.
+  - name: Documentation
+    url: https://iris-code.pages.dev/docs.html
+    about: Read the docs first — most questions are answered there.
+  - name: Security disclosures
+    url: https://github.com/oorbitproductivity-oss/iris/security/policy
+    about: Report a vulnerability privately. Do not open a public issue.

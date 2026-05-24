@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — Features</title>
+  <meta name="description" content="Every feature in Iris Code, the premium desktop GUI for Claude Code. Orchestrator, parallel sub-agents, Spotlight overlay, command palette, templates, and more." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a class="active" href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" style="padding-bottom: var(--s-6)">
+      <div class="container hero-inner">
+        <span class="hero-eyebrow"><span class="dot"></span> The full tour</span>
+        <h1>Coding agents, <span class="wordmark">choreographed</span>.</h1>
+        <p class="hero-sub">
+          Every surface in Iris Code exists for one reason: keep the operator in flow.
+          Here's what each feature does, why it exists, and how the pieces fit together.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURE SECTIONS
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+
+        <!-- 01 Orchestrator -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">01 / Orchestrator</span>
+            <h2>Iris is the single point of conversation.</h2>
+            <p>
+              One agent, one chat window, one mental model. Tell Iris what you want to accomplish
+              and she decomposes the work — drafting a plan, spawning workers, watching their
+              progress, and surfacing the next decision for you to confirm with a click.
+            </p>
+            <p>
+              You never have to remember which terminal had which task. Iris keeps the thread
+              of the whole engagement, and writes a calm, structured summary at every milestone.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="flow">
+              <div class="flow-node flow-node--iris">Iris</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-row">
+                <div class="flow-node">worker · refactor</div>
+                <div class="flow-node">worker · tests</div>
+                <div class="flow-node">worker · docs</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 02 Parallel sub-agents -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">02 / Parallel sub-agents</span>
+            <h2>N workers, side by side.</h2>
+            <p>
+              Iris Code spawns multiple <code>claude</code> subprocesses simultaneously. Each lives
+              in its own working directory (or sandbox copy), each streams its output independently,
+              and each can be paused, cancelled, or branched without disturbing the rest.
+            </p>
+            <p>
+              You can give different agents different API keys, different models, even different
+              system prompts — they're real, isolated processes, not multiplexed views.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <pre class="ascii">
+<span class="gold">┌──────────┐</span>   <span class="gold">┌──────────┐</span>   <span class="gold">┌──────────┐</span>
+<span class="gold">│  agent 1 │</span>   <span class="gold">│  agent 2 │</span>   <span class="gold">│  agent 3 │</span>
+<span class="gold">└────┬─────┘</span>   <span class="gold">└────┬─────┘</span>   <span class="gold">└────┬─────┘</span>
+     <span class="dim">│</span>              <span class="dim">│</span>              <span class="dim">│</span>
+   <span class="dim">refactor</span>        <span class="dim">tests</span>           <span class="dim">docs</span>
+     <span class="dim">│</span>              <span class="dim">│</span>              <span class="dim">│</span>
+     <span class="dim">└──────────────┴──────────────┘</span>
+                    <span class="dim">│</span>
+                <span class="gold">▼ orchestrator</span>
+            </pre>
+          </div>
+        </article>
+
+        <!-- 03 Spotlight -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">03 / Spotlight overlay</span>
+            <h2>Ask from anywhere.</h2>
+            <p>
+              A global hotkey, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd>, summons a
+              translucent overlay over whatever application you're in. Ask a question, paste an
+              error, drop a stack trace — the response streams back in‑place. Press
+              <kbd>Esc</kbd> when you're done and your previous focus is restored.
+            </p>
+            <p>
+              It's a launcher, a rubber duck, and a research assistant — without ever opening
+              a window or breaking the rhythm of what you were doing.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="keycap-row" style="margin-bottom: var(--s-5)">
+              <span class="keycap">Ctrl</span><span class="plus">+</span>
+              <span class="keycap">Shift</span><span class="plus">+</span>
+              <span class="keycap keycap--gold">Space</span>
+            </div>
+            <div class="bubble bubble--iris" style="max-width: none; width: 100%;">
+              <span class="label">Iris · overlay</span>
+              Why is my <code>fetch()</code> returning a 401 in dev but not prod?
+            </div>
+          </div>
+        </article>
+
+        <!-- 04 Sandboxed workspaces -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">04 / Sandboxed workspaces</span>
+            <h2>Try things without breaking anything.</h2>
+            <p>
+              Toggle sandbox mode on a thread and Iris Code clones your project into a scratch
+              directory. The agent works there, freely. When you're satisfied, export the changes
+              back as a patch, a branch, or an overlay onto your real working tree.
+            </p>
+            <p>
+              Perfect for risky refactors, experimental rewrites, or just trying three approaches
+              in three parallel sandboxes and merging the best one.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="arch">
+              <div class="arch-card"><strong>Repo</strong>your working tree</div>
+              <div class="arch-card center"><strong>Sandbox</strong>scratch clone</div>
+              <div class="arch-card"><strong>Patch</strong>export back</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 05 Encrypted key vault -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">05 / Encrypted key vault</span>
+            <h2>Per‑agent API keys, locked down.</h2>
+            <p>
+              Store as many Anthropic keys as you like, each with a friendly name —
+              "personal", "client‑a", "experiments" — and assign a different key to each agent.
+              Keys are encrypted at rest via the OS keychain (DPAPI on Windows; Keychain on macOS).
+            </p>
+            <p>
+              No plaintext keys in config files. No leaking through logs. Rotate any key from
+              one place and every agent picks up the change.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <ul class="pill-list">
+              <li>personal · <span class="t-muted">sk-ant‑*****</span></li>
+              <li>client‑a · <span class="t-muted">sk-ant‑*****</span></li>
+              <li>experiments · <span class="t-muted">sk-ant‑*****</span></li>
+              <li>team-shared · <span class="t-muted">sk-ant‑*****</span></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- 06 Live streaming UI -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">06 / Live streaming UI</span>
+            <h2>Token‑by‑token. Tool‑by‑tool.</h2>
+            <p>
+              Iris Code renders the assistant's output as it arrives — character by character —
+              with first‑class UI for tool calls. Every <code>read_file</code>, <code>edit_file</code>,
+              <code>run_shell</code> shows up as a card you can expand to see the exact arguments
+              and result.
+            </p>
+            <p>
+              Long turns get a milestone timeline at the side, so you can scrub a fifteen‑minute
+              session in two seconds.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+              <div class="tool-card"><span class="tag">read_file</span><span>src/auth.ts</span><span class="spinner"></span></div>
+              <div class="tool-card"><span class="tag">edit_file</span><span>+ src/middleware/auth.ts</span></div>
+              <div class="tool-card"><span class="tag">run_shell</span><span>pnpm test --filter auth</span></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 07 Codex-grade design -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">07 / Codex‑grade design</span>
+            <h2>Warm dark. Gold accents. Quiet motion.</h2>
+            <p>
+              Every color, radius, and easing curve was chosen to feel like a high‑end editor:
+              calm enough to live in for hours, expressive enough to surface state without
+              announcement. The result is a tool that looks like the kind of thing professionals
+              choose, because professionals chose it.
+            </p>
+            <p>
+              No bright reds. No flat enterprise blue. No marketing chrome. Just the work.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+              <div style="display: flex; gap: 8px;">
+                <span style="width: 32px; height: 32px; border-radius: 8px; background: #0c0c10; border: 1px solid var(--border)"></span>
+                <span style="width: 32px; height: 32px; border-radius: 8px; background: #131319; border: 1px solid var(--border)"></span>
+                <span style="width: 32px; height: 32px; border-radius: 8px; background: #1a1a22; border: 1px solid var(--border)"></span>
+                <span style="width: 32px; height: 32px; border-radius: 8px; background: #c89b3c"></span>
+                <span style="width: 32px; height: 32px; border-radius: 8px; background: #e6b85c"></span>
+              </div>
+              <div style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gold-bright)">Iowan Old Style</div>
+              <div style="font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-secondary)">Inter / Segoe UI Variable</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 08 Command palette -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">08 / Command palette <span class="chip chip--new">new</span></span>
+            <h2>Every action, one keypress away.</h2>
+            <p>
+              Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and a fuzzy search opens
+              over the entire app. New thread, switch agent, change model, open settings, pin
+              this thread, export to markdown — type a few letters, hit return.
+            </p>
+            <p>
+              The keyboard is the source of truth.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="keycap-row">
+              <span class="keycap">Ctrl</span><span class="plus">+</span>
+              <span class="keycap">Shift</span><span class="plus">+</span>
+              <span class="keycap keycap--gold">P</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 09 Workflow templates -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">09 / Workflow templates <span class="chip chip--new">new</span></span>
+            <h2>Start fast, with intent.</h2>
+            <p>
+              Iris Code ships with curated templates — Code Review, Refactor, Test Coverage,
+              Documentation, Bug Hunt, Migration — each preloaded with a system prompt and a
+              short list of starter actions. One click and you're already useful.
+            </p>
+            <p>
+              Custom templates are coming in v0.3. For now, fork any built‑in template and tweak.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <ul class="pill-list">
+              <li>Code Review</li>
+              <li>Refactor</li>
+              <li>Test Coverage</li>
+              <li>Documentation</li>
+              <li>Bug Hunt</li>
+              <li>Migration</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- 10 Stats dashboard -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">10 / Stats dashboard <span class="chip chip--new">new</span></span>
+            <h2>See the work, at a glance.</h2>
+            <p>
+              A live dashboard tracks every thread, message, tool invocation, and token consumed.
+              Sort by agent, by template, by week. Spot the threads where you're losing time and
+              the templates that pay back.
+            </p>
+            <p>
+              No telemetry leaves your machine. Stats are local‑only.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;">
+              <div class="arch-card"><strong>248</strong>threads</div>
+              <div class="arch-card"><strong>3,481</strong>messages</div>
+              <div class="arch-card"><strong>9,204</strong>tool calls</div>
+              <div class="arch-card center"><strong>14h</strong>this week</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 11 Export -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">11 / Conversation export <span class="chip chip--new">new</span></span>
+            <h2>One click to markdown.</h2>
+            <p>
+              Any thread, exported as a clean markdown file — code blocks intact, tool calls
+              formatted as collapsible blocks, headings for each turn. Drop it in a PR, an issue,
+              or your knowledge base.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <pre class="ascii" style="font-size: 0.78rem"><span class="gold"># Refactor auth flow</span>
+
+<span class="dim">> Move the auth middleware out of</span>
+<span class="dim">> server.js into its own module...</span>
+
+<span class="gold">## Iris</span>
+I've extracted the middleware...
+
+<span class="dim">- tool: read_file(server.js)</span>
+<span class="dim">- tool: edit_file(src/middleware/auth.js)</span></pre>
+          </div>
+        </article>
+
+        <!-- 12 Notifications -->
+        <article class="feature-row reverse reveal">
+          <div>
+            <span class="index">12 / System notifications <span class="chip chip--new">new</span></span>
+            <h2>It pings you when it's done.</h2>
+            <p>
+              Kick off a long refactor. Switch to your inbox. Iris Code raises a native OS toast
+              when the agent finishes — or when it stalls on a question only you can answer.
+              Configure exactly which events trigger which kind of nudge.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="card" style="width: 100%; padding: var(--s-3) var(--s-4)">
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(200, 155, 60, 0.12); border: 1px solid rgba(200, 155, 60, 0.3); display: flex; align-items: center; justify-content: center; color: var(--gold-bright); font-family: var(--font-serif); font-weight: 600;">i</div>
+                <div>
+                  <strong style="display: block; font-family: var(--font-sans); font-size: 0.92rem">Iris Code</strong>
+                  <span style="color: var(--text-secondary); font-size: 0.86rem">"Refactor auth flow" finished · 6 files changed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 13 Pins & snippets -->
+        <article class="feature-row reveal">
+          <div>
+            <span class="index">13 / Pinned threads + snippets <span class="chip chip--new">new</span></span>
+            <h2>Your favorites, one keystroke away.</h2>
+            <p>
+              Pin threads you return to often — they sit at the top of the sidebar with a small
+              gold ring. Save prompts as snippets; type <code>/</code> in any chat input to see
+              and insert them with fuzzy search.
+            </p>
+            <p>
+              Build a personal vocabulary of prompts that work for you, then summon them with
+              two keystrokes.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+              <div class="bubble bubble--user" style="max-width: 100%;">/<span class="t-gold">review</span></div>
+              <div class="tool-card"><span class="tag">snippet</span><span>/review · Do a thorough code review of the diff…</span></div>
+              <div class="tool-card"><span class="tag">snippet</span><span>/refactor · Refactor this file for clarity…</span></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ARCHITECTURE
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-6)">
+          <span class="section-eyebrow">How it works</span>
+          <h2>A small Electron shell around a big idea.</h2>
+          <p class="section-lead">
+            Iris Code is intentionally thin. The heavy lifting happens in <code>claude</code>;
+            we just give you a calm cockpit to fly N of them at once.
+          </p>
+        </header>
+
+        <div class="card reveal" style="padding: var(--s-6)">
+          <div class="arch" style="grid-template-columns: 1fr; gap: var(--s-4)">
+            <div class="arch-card"><strong>You</strong>keyboard · spotlight · command palette</div>
+            <div class="flow-arrow" style="margin: 0 auto; height: 20px"></div>
+            <div class="arch-card center"><strong>Iris orchestrator</strong>conversation, planning, suggestion, summary</div>
+            <div class="flow-arrow" style="margin: 0 auto; height: 20px"></div>
+            <div class="arch" style="grid-template-columns: 1fr 1fr 1fr; gap: var(--s-3)">
+              <div class="arch-card"><strong>claude #1</strong>sandbox · key A</div>
+              <div class="arch-card"><strong>claude #2</strong>sandbox · key B</div>
+              <div class="arch-card"><strong>claude #3</strong>repo · key A</div>
+            </div>
+            <div class="flow-arrow" style="margin: 0 auto; height: 20px"></div>
+            <div class="arch-card"><strong>Your repo, your machine, your keys</strong>nothing leaves the box</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ROADMAP
+         ============================================================ -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-6)">
+          <span class="section-eyebrow">What's next</span>
+          <h2>The v0.3 roadmap.</h2>
+          <p class="section-lead">
+            What we're working on right now, ordered roughly by likelihood of landing first.
+          </p>
+        </header>
+
+        <ul class="roadmap-list">
+          <li class="reveal">
+            <span class="ver">v0.3 · Mode B</span>
+            <div>
+              <h4>Bring‑your‑own backend.</h4>
+              <p>An optional "Mode B" runtime that talks to non‑Anthropic APIs (OpenAI, local models via OpenAI‑compatible servers, others) while keeping the same orchestrator UX.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <span class="ver">v0.3 · Browser pane</span>
+            <div>
+              <h4>Live browser via Playwright MCP.</h4>
+              <p>Embed a controllable browser pane next to the chat. Agents can navigate, click, and screenshot — perfect for testing UI changes against the running app.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <span class="ver">v0.3 · Diff viewer</span>
+            <div>
+              <h4>First‑class diff viewer for file edits.</h4>
+              <p>Every <code>edit_file</code> tool call expands into a syntax‑highlighted diff. Approve, reject, or amend before the change is written.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <span class="ver">v0.3 · Custom templates</span>
+            <div>
+              <h4>Author your own workflow templates.</h4>
+              <p>A small editor for system prompt, starter actions, and default tool config. Share templates as a single JSON file.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <span class="ver">v0.4 · Mac &amp; Linux</span>
+            <div>
+              <h4>Native builds for macOS and Linux.</h4>
+              <p>Signed DMG for macOS, AppImage and deb for Linux. Hotkey, keychain, and notification integrations on each platform.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="cta-strip reveal">
+        <h2>One orchestrator. N agents. Zero context‑switching.</h2>
+        <p>Iris Code v0.4.0 is ready. Try it now, share what you build.</p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="download.html">Download for Windows</a>
+          <a class="btn btn--ghost" href="docs.html">Read the docs</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="product.html#roadmap">Roadmap</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+            <li><a href="mailto:hello@iris-code.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Iris Code · MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

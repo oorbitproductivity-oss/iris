@@ -1,0 +1,256 @@
+/* ═══════════════════════════════════════════════════════════
+   Iris Code — Design Tokens
+   Codex-grade dark UI. Warm charcoal base, restrained gold accent.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Surfaces — slightly warmer than pure cold black */
+  --bg-0: #0c0c10;
+  --bg-1: #111116;
+  --bg-2: #17171e;
+  --bg-3: #1f1f28;
+  --bg-4: #272731;
+
+  /* Borders — rgba whites so they read on any surface */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-faint: rgba(255, 255, 255, 0.03);
+
+  /* Text ramp */
+  --text-0: #f4f4f5;
+  --text-1: #c4c4cc;
+  --text-2: #8b8b96;
+  --text-3: #5a5a66;
+  --text-4: #3f3f49;
+  --text-glow: rgba(255, 255, 255, 0.04);
+
+  /* Accents — warm gold, three stops + halo */
+  --accent: #c89b3c;
+  --accent-2: #e6b85c;
+  --accent-bright: #e0b656;
+  --accent-deep: #8a6a26;
+  --accent-soft: rgba(200, 155, 60, 0.14);
+  --accent-softer: rgba(200, 155, 60, 0.08);
+  --accent-glow: rgba(200, 155, 60, 0.40);
+  --accent-ring: rgba(200, 155, 60, 0.35);
+  --accent-ring-soft: rgba(200, 155, 60, 0.18);
+  --accent-ring-quiet: rgba(200, 155, 60, 0.10);
+
+  /* Status */
+  --green: #4ade80;
+  --green-soft: rgba(74, 222, 128, 0.10);
+  --green-border: rgba(74, 222, 128, 0.25);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.14);
+  --blue: #60a5fa;
+  --blue-soft: rgba(96, 165, 250, 0.08);
+  --blue-border: rgba(96, 165, 250, 0.18);
+  --amber: #fbbf24;
+  --gray-dot: #5a5a66;
+
+  /* Shadows — soft, multi-stop, never harsh */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.32);
+  --shadow-2: 0 8px 24px -6px rgba(0, 0, 0, 0.42);
+  --shadow-3: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-focus: 0 0 0 3px var(--accent-ring-soft);
+
+  /* Radii */
+  --radius-1: 6px;
+  --radius-2: 8px;
+  --radius-3: 14px;
+  --radius-4: 20px;
+
+  /* Spacing — 4-based scale, used religiously */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Typography scale */
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 22px;
+  --text-3xl: 28px;
+
+  --font-sans: -apple-system, "Inter", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, monospace;
+  --font-serif: "Iowan Old Style", "Charter", Georgia, serif;
+
+  /* Sizing */
+  --sidebar-w: 264px;
+  --titlebar-h: 36px;
+
+  /* Motion — Codex curve */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur: 180ms;
+  --dur-slow: 360ms;
+
+  /* Brand-mark SVG as a CSS mask — currentColor-tintable */
+  --iris-mark-url: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3.5'/><path d='M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4L5.3 5.3'/></svg>");
+}
+
+/* ─── Light theme overrides ─── */
+[data-theme="light"] {
+  --bg-0: #fafaf7;
+  --bg-1: #f3f3ee;
+  --bg-2: #eaeae3;
+  --bg-3: #dedfd6;
+  --bg-4: #d2d3c9;
+
+  --border: rgba(0, 0, 0, 0.10);
+  --border-strong: rgba(0, 0, 0, 0.18);
+  --border-faint: rgba(0, 0, 0, 0.05);
+
+  --text-0: #18181b;
+  --text-1: #3f3f46;
+  --text-2: #6b6b76;
+  --text-3: #9a9aa3;
+  --text-4: #c1c1ca;
+  --text-glow: rgba(0, 0, 0, 0.04);
+
+  /* Slightly deeper gold in light mode for legibility */
+  --accent: #a67c1f;
+  --accent-2: #c89b3c;
+  --accent-bright: #c89b3c;
+  --accent-deep: #6f5310;
+  --accent-soft: rgba(166, 124, 31, 0.14);
+  --accent-softer: rgba(166, 124, 31, 0.06);
+  --accent-glow: rgba(166, 124, 31, 0.28);
+  --accent-ring: rgba(166, 124, 31, 0.28);
+  --accent-ring-soft: rgba(166, 124, 31, 0.16);
+  --accent-ring-quiet: rgba(166, 124, 31, 0.10);
+
+  --green: #16a34a;
+  --green-soft: rgba(22, 163, 74, 0.12);
+  --green-border: rgba(22, 163, 74, 0.30);
+  --red: #b91c1c;
+  --red-soft: rgba(185, 28, 28, 0.12);
+  --blue: #2563eb;
+  --blue-soft: rgba(37, 99, 235, 0.10);
+  --blue-border: rgba(37, 99, 235, 0.22);
+  --gray-dot: #b2b3ba;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0 8px 24px -6px rgba(0, 0, 0, 0.14);
+  --shadow-3: 0 20px 60px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04) inset;
+  --shadow-inset: inset 0 1px 0 rgba(0, 0, 0, 0.04);
+  --shadow-focus: 0 0 0 3px var(--accent-ring-soft);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-feature-settings: "cv11", "ss01", "ss03", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  user-select: none;
+}
+
+input, textarea, button { font-family: inherit; color: inherit; font-feature-settings: inherit; }
+button { background: none; border: none; cursor: pointer; }
+
+a { color: var(--accent-2); text-decoration: none; text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--bg-3);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Focus rings — uniform across the app */
+:focus { outline: none; }
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-2);
+}
+
+/* Composer textareas/inputs sit INSIDE a wrapper that already paints the focus
+   ring on :focus-within. Suppress the inner ring so we don't double up
+   (the "two yellow boxes" effect). */
+.composer textarea,
+.composer textarea:focus,
+.composer textarea:focus-visible,
+.iro-input,
+.iro-input:focus,
+.iro-input:focus-visible {
+  box-shadow: none !important;
+  outline: none;
+  caret-color: var(--text-0);
+}
+
+/* Selection */
+::selection { background: var(--accent-soft); color: var(--text-0); }
+
+/* Keyframes — small, named after the brand */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes irisFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUpSmall {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes irisPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+@keyframes irisShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Reusable brand mark — wrap any element to get the Iris glyph + warm glow */
+.iris-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+.iris-mark::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
+  z-index: -1;
+  pointer-events: none;
+}

@@ -22,7 +22,7 @@ These rules apply in every project space: issues, PRs, Discussions, and any othe
 ## Reporting
 
 If you see something off, open a **private security advisory** on the GitHub repository at
-<https://github.com/oorbitproductivity-oss/iriscode/security/advisories/new> and tag it as a code-of-conduct report. Reports go directly to the maintainers. Include links, dates, and what happened. We will respond within 72 hours.
+<https://github.com/oorbitproductivity-oss/iris/security/advisories/new> and tag it as a code-of-conduct report. Reports go directly to the maintainers. Include links, dates, and what happened. We will respond within 72 hours.
 
 If a maintainer is the subject of the report, address it to another maintainer.
 

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — Share with a friend</title>
+  <meta name="description" content="Share Iris Code with a friend. One link, every channel — Gmail, iMessage, WhatsApp, X, copy to clipboard." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <meta property="og:title" content="Iris Code — The god of sub-messaging" />
+  <meta property="og:description" content="A premium desktop GUI for Claude Code. One orchestrator, N parallel sub-agents, zero context-switching." />
+  <meta property="og:image" content="assets/iris-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    .share-page { padding: var(--s-7) 0 var(--s-8); }
+    .share-card {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--s-7);
+      background: var(--bg-elev-1);
+      border: 1px solid var(--border);
+      border-radius: var(--r-4);
+      text-align: center;
+    }
+    .share-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin: 0 auto var(--s-5);
+      background: radial-gradient(circle at 35% 35%, rgba(230, 184, 92, 0.35), transparent 60%), var(--bg-elev-2);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(200, 155, 60, 0.18);
+    }
+    .share-ring img { width: 56px; height: 56px; }
+    .share-url-row {
+      display: flex;
+      gap: var(--s-2);
+      margin: var(--s-5) 0 var(--s-6);
+      flex-wrap: wrap;
+    }
+    .share-url-row input {
+      flex: 1 1 280px;
+      padding: var(--s-3) var(--s-4);
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-2);
+      color: var(--text);
+      font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+      font-size: 0.92rem;
+    }
+    .share-channels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--s-3);
+      margin-top: var(--s-5);
+    }
+    .share-channel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-2);
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-4) var(--s-3);
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-3);
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 0.15s ease, transform 0.1s ease;
+      cursor: pointer;
+      font: inherit;
+    }
+    .share-channel:hover {
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .share-channel .channel-icon {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: var(--gold-bright);
+    }
+    .share-channel .channel-name { font-size: 0.92rem; }
+    .share-toast {
+      position: fixed;
+      bottom: var(--s-6);
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      padding: var(--s-3) var(--s-5);
+      background: var(--bg-elev-3);
+      border: 1px solid var(--gold);
+      border-radius: var(--r-pill);
+      color: var(--gold-bright);
+      font-size: 0.92rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 1000;
+    }
+    .share-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="share-page">
+      <div class="container">
+        <div class="share-card">
+          <div class="share-ring">
+            <img src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          </div>
+          <span class="section-eyebrow">Share</span>
+          <h1 style="font-size: clamp(1.6rem, 3vw, 2.4rem); margin: var(--s-3) 0 var(--s-3)">Send Iris Code to a friend.</h1>
+          <p style="margin: 0 auto; max-width: 460px; color: var(--text-secondary)">
+            Pick a channel. One click, prefilled message, no extra steps.
+            We don't track shares — the link is just the link.
+          </p>
+
+          <div class="share-url-row">
+            <input id="share-url" type="text" readonly value="" aria-label="Share URL" />
+            <button id="copy-btn" class="btn btn--primary" type="button">Copy link</button>
+          </div>
+
+          <button id="native-share" class="btn btn--ghost btn--lg" type="button" style="display: none; margin-bottom: var(--s-5);">
+            Open device share sheet
+          </button>
+
+          <div class="share-channels">
+            <a id="ch-gmail" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">G</span><span class="channel-name">Gmail</span>
+            </a>
+            <a id="ch-mail" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">@</span><span class="channel-name">Email / iMessage</span>
+            </a>
+            <a id="ch-whatsapp" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">W</span><span class="channel-name">WhatsApp</span>
+            </a>
+            <a id="ch-x" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">X</span><span class="channel-name">X / Twitter</span>
+            </a>
+            <a id="ch-telegram" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">T</span><span class="channel-name">Telegram</span>
+            </a>
+            <a id="ch-reddit" class="share-channel" target="_blank" rel="noopener">
+              <span class="channel-icon">R</span><span class="channel-name">Reddit</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="share-toast" role="status" aria-live="polite">Link copied to clipboard</div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="share.html">Share</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Iris Code &middot; MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const SHARE_URL = (location.origin && !location.origin.startsWith("file:"))
+        ? location.origin + "/"
+        : "https://iris-code.dev/";
+      const SHARE_TITLE = "Iris Code — The god of sub-messaging";
+      const SHARE_TEXT = "Iris Code is a premium desktop GUI for Claude Code. One orchestrator, N parallel sub-agents, zero context-switching. MIT licensed, Windows download.";
+      const enc = encodeURIComponent;
+
+      document.getElementById("share-url").value = SHARE_URL;
+
+      // Native share sheet (mobile/Edge/Safari)
+      if (navigator.share) {
+        const btn = document.getElementById("native-share");
+        btn.style.display = "inline-flex";
+        btn.addEventListener("click", function () {
+          navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL })
+            .catch(function () { /* user dismissed */ });
+        });
+      }
+
+      // Channel links
+      const subject = enc("Try Iris Code");
+      const body = enc(SHARE_TEXT + "\n\n" + SHARE_URL);
+      document.getElementById("ch-gmail").href =
+        "https://mail.google.com/mail/?view=cm&fs=1&su=" + subject + "&body=" + body;
+      document.getElementById("ch-mail").href =
+        "mailto:?subject=" + subject + "&body=" + body;
+      document.getElementById("ch-whatsapp").href =
+        "https://wa.me/?text=" + enc(SHARE_TEXT + " " + SHARE_URL);
+      document.getElementById("ch-x").href =
+        "https://twitter.com/intent/tweet?text=" + enc(SHARE_TEXT) + "&url=" + enc(SHARE_URL);
+      document.getElementById("ch-telegram").href =
+        "https://t.me/share/url?url=" + enc(SHARE_URL) + "&text=" + enc(SHARE_TEXT);
+      document.getElementById("ch-reddit").href =
+        "https://www.reddit.com/submit?url=" + enc(SHARE_URL) + "&title=" + enc(SHARE_TITLE);
+
+      // Copy to clipboard
+      const toast = document.getElementById("toast");
+      function flashToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(function () { toast.classList.remove("show"); }, 1800);
+      }
+      document.getElementById("copy-btn").addEventListener("click", function () {
+        const input = document.getElementById("share-url");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(SHARE_URL).then(
+            function () { flashToast("Link copied to clipboard"); },
+            function () { input.select(); document.execCommand("copy"); flashToast("Link copied"); }
+          );
+        } else {
+          input.select();
+          document.execCommand("copy");
+          flashToast("Link copied");
+        }
+      });
+    })();
+  </script>
+  <script src="js/site.js"></script>
+</body>
+</html>

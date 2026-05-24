@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — The god of sub-messaging</title>
+  <meta name="description" content="Iris Code is a premium desktop GUI for Claude Code. One orchestrator agent. N parallel sub-agents. Zero context-switching." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <span class="hero-eyebrow"><span class="dot"></span> v0.4.0 — now with the Telegram Remote Agent</span>
+        <h1>The god of <span class="wordmark">sub‑messaging</span>.</h1>
+        <p class="hero-sub">
+          Iris Code is a premium desktop GUI for Anthropic's Claude Code CLI.
+          One orchestrator agent watches and directs many worker subagents in parallel,
+          so you can keep your hands on the keyboard and your mind on the problem.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="download.html">Download for Windows</a>
+          <a class="btn btn--ghost btn--lg" href="docs.html">Read the docs</a>
+        </div>
+        <p class="hero-meta">Free &amp; open source · MIT · Windows 10 / 11 · Mac &amp; Linux coming soon</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         APP MOCK
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container reveal">
+        <div class="app-mock" aria-hidden="true">
+          <div class="app-mock__chrome">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="title">Iris Code — orchestrator</span>
+          </div>
+          <div class="app-mock__body">
+            <aside class="app-mock__sidebar">
+              <div class="app-mock__brand">
+                <span class="ring"></span> <span>Iris</span>
+              </div>
+              <div class="app-mock__newthread">+ New thread</div>
+              <ul class="app-mock__threads">
+                <li class="active"><span class="pip pip--gold"></span> Refactor auth flow</li>
+                <li><span class="pip pip--green"></span> Write tests for billing</li>
+                <li><span class="pip"></span> Docs cleanup pass</li>
+              </ul>
+            </aside>
+            <div class="app-mock__main">
+              <div class="app-mock__header">
+                <span class="title">Refactor auth flow</span>
+                <span class="meta">
+                  <span class="chip">claude-sonnet-4.7</span>
+                  <span>· sandbox</span>
+                </span>
+              </div>
+              <div class="app-mock__chat">
+                <div class="bubble bubble--user">
+                  Move the auth middleware out of <code>server.js</code> into its own module and add a 30s session refresh.
+                </div>
+                <div class="tool-card">
+                  <span class="tag">read_file</span>
+                  <span>server.js · 412 lines</span>
+                  <span class="spinner"></span>
+                </div>
+                <div class="tool-card">
+                  <span class="tag">edit_file</span>
+                  <span>+ src/middleware/auth.js · 86 lines</span>
+                </div>
+                <div class="bubble bubble--iris">
+                  <span class="label">Iris</span>
+                  I've extracted the middleware into <code>src/middleware/auth.js</code> and wired the
+                  refresh interval. Running the test suite to verify <span class="cursor"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHAT IT DOES — IRIS spelled out
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="t-center reveal" style="margin-bottom: var(--s-7)">
+          <span class="section-eyebrow">What it does</span>
+          <h2 class="section-title">One orchestrator. N agents. Zero context‑switching.</h2>
+          <p class="section-lead" style="margin-left: auto; margin-right: auto;">
+            Iris is the messenger goddess of Greek mythology — the god of sub‑messaging —
+            and an acronym: <strong>I</strong>ntelligent
+            <strong>R</strong>outing for <strong>I</strong>ntegrated
+            <strong>S</strong>ub‑agents. Claude Code, turned into a coordinated team —
+            a calm dashboard where the right thing happens in the right pane at the right time.
+          </p>
+        </header>
+        <div class="four-col">
+          <article class="card reveal">
+            <div class="icon-block">I</div>
+            <h3>Intelligent</h3>
+            <p>
+              Iris is your single point of conversation. Describe what you want, and she splits the
+              work into discrete sub‑tasks, then suggests next actions you confirm with a click.
+            </p>
+          </article>
+          <article class="card reveal">
+            <div class="icon-block">R</div>
+            <h3>Routing</h3>
+            <p>
+              Every turn lands in the right place — the right model, the right agent,
+              the right working directory — without you breaking flow to choose.
+            </p>
+          </article>
+          <article class="card reveal">
+            <div class="icon-block">I</div>
+            <h3>Integrated</h3>
+            <p>
+              A global Spotlight overlay, fuzzy command palette, prompt snippets, and tasteful
+              system notifications — one surface for every keystroke you'd otherwise lose.
+            </p>
+          </article>
+          <article class="card reveal">
+            <div class="icon-block">S</div>
+            <h3>Sub‑agents</h3>
+            <p>
+              Spin up N independent <code>claude</code> processes — each in its own working
+              directory or sandbox copy. Watch them stream side by side without stepping on each other.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         BENTO FEATURE GRID
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-6)">
+          <span class="section-eyebrow">Highlights</span>
+          <h2 class="section-title">Built like a dashboard for the calm operator.</h2>
+          <p class="section-lead">Every surface is keyboard‑first, every state is observable, every detail is intentional.</p>
+        </header>
+
+        <div class="bento">
+          <article class="tile tile--lg reveal">
+            <span class="tile-eyebrow">Spotlight</span>
+            <h3>Ask Iris from anywhere.</h3>
+            <p>
+              Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> from any application to
+              summon a translucent overlay. Type your question, hit return, and your answer
+              streams back in‑place. No window switching. No focus tax.
+            </p>
+            <div style="margin-top: var(--s-5)">
+              <div class="keycap-row">
+                <span class="keycap">Ctrl</span><span class="plus">+</span>
+                <span class="keycap">Shift</span><span class="plus">+</span>
+                <span class="keycap keycap--gold">Space</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile--md reveal">
+            <span class="tile-eyebrow">v0.3 — new</span>
+            <h3>Workflow templates.</h3>
+            <p>One‑click starts for Code Review, Refactor, Test Coverage, Documentation, and more — each with a curated system prompt and starter actions.</p>
+          </article>
+
+          <article class="tile tile--md reveal">
+            <span class="tile-eyebrow">v0.3 — new</span>
+            <h3>Stats dashboard.</h3>
+            <p>Threads, messages sent, tool invocations, and token usage across every agent — at a glance.</p>
+          </article>
+
+          <article class="tile tile--sm reveal">
+            <span class="tile-eyebrow">Sandbox</span>
+            <h3>Isolated workspaces.</h3>
+            <p>Each agent gets a copy of your project. Changes export back when you're satisfied.</p>
+          </article>
+
+          <article class="tile tile--sm reveal">
+            <span class="tile-eyebrow">Snippets</span>
+            <h3>Type <code>/</code> to summon.</h3>
+            <p>Saved prompts, ready to fire — with auto‑completion as you type.</p>
+          </article>
+
+          <article class="tile tile--sm reveal">
+            <span class="tile-eyebrow">Streaming</span>
+            <h3>Token‑by‑token, lossless.</h3>
+            <p>Live tool cards and a milestone timeline for long‑running turns.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TESTIMONIALS
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="t-center reveal" style="margin-bottom: var(--s-7)">
+          <span class="section-eyebrow">From the early access</span>
+          <h2 class="section-title">For people who code with intent.</h2>
+        </header>
+        <div class="quotes">
+          <div class="quote reveal">
+            <blockquote>I wanted Claude Code, but with the calm of a real desktop app. So I built it.</blockquote>
+            <div class="who"><strong>Creator's note</strong>Iris Code</div>
+          </div>
+          <div class="quote reveal">
+            <blockquote>The Spotlight overlay is the killer feature. I haven't opened a terminal in two days.</blockquote>
+            <div class="who"><strong>Early access user</strong>indie product engineer</div>
+          </div>
+          <div class="quote reveal">
+            <blockquote>Five agents at once, one orchestrator, one keyboard. It's an unfair advantage on Mondays.</blockquote>
+            <div class="who"><strong>Senior platform engineer</strong>fintech, NYC</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FINAL CTA STRIP
+         ============================================================ -->
+    <section class="container">
+      <div class="cta-strip reveal">
+        <h2>Coding agents, choreographed.</h2>
+        <p>Download Iris Code v0.4.0 for Windows. Free, MIT licensed, no account required.</p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="download.html">Download for Windows</a>
+          <a class="btn btn--ghost" href="product.html">See every feature</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="product.html#roadmap">Roadmap</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+            <li><a href="mailto:hello@iris-code.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Iris Code · MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+/* ═══════════════════════════════════════════════════════════
+   themes.css — Named theme variants
+   Each block overrides only color tokens (surfaces, text ramp,
+   accents). Spacing, radii, typography stay shared.
+   The base :root in tokens.css is "codex-dark"; that block
+   is duplicated here so [data-theme-name="codex-dark"] is an
+   explicit, switchable surface too.
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ───────────────────────────────────────────────────────────
+   codex-dark — default (warm charcoal + gold)
+   ─────────────────────────────────────────────────────────── */
+:root[data-theme-name="codex-dark"] {
+  --bg-0: #0c0c10;
+  --bg-1: #111116;
+  --bg-2: #17171e;
+  --bg-3: #1f1f28;
+  --bg-4: #272731;
+
+  --text-0: #f4f4f5;
+  --text-1: #c4c4cc;
+  --text-2: #8b8b96;
+
+  --accent: #c89b3c;
+  --accent-2: #e6b85c;
+  --accent-soft: rgba(200, 155, 60, 0.14);
+  --accent-ring: rgba(200, 155, 60, 0.35);
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   codex-light — paper + deeper gold
+   ─────────────────────────────────────────────────────────── */
+:root[data-theme-name="codex-light"] {
+  --bg-0: #fafaf7;
+  --bg-1: #f3f3ee;
+  --bg-2: #eaeae3;
+  --bg-3: #dedfd6;
+  --bg-4: #d2d3c9;
+
+  --text-0: #18181b;
+  --text-1: #3f3f46;
+  --text-2: #6b6b76;
+
+  --accent: #a67c1f;
+  --accent-2: #c89b3c;
+  --accent-soft: rgba(166, 124, 31, 0.14);
+  --accent-ring: rgba(166, 124, 31, 0.28);
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   midnight — deep blue-black + cyan accent
+   ─────────────────────────────────────────────────────────── */
+:root[data-theme-name="midnight"] {
+  --bg-0: #07080c;
+  --bg-1: #0c0e16;
+  --bg-2: #131623;
+  --bg-3: #1b1f30;
+  --bg-4: #232940;
+
+  --text-0: #e8edf5;
+  --text-1: #b9c2d4;
+  --text-2: #7d869b;
+
+  --accent: #58a6ff;
+  --accent-2: #79b8ff;
+  --accent-soft: rgba(88, 166, 255, 0.14);
+  --accent-ring: rgba(88, 166, 255, 0.32);
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   solarized (dark) — Ethan Schoonover's deep teal
+   ─────────────────────────────────────────────────────────── */
+:root[data-theme-name="solarized"] {
+  --bg-0: #002b36;
+  --bg-1: #073642;
+  --bg-2: #0a4452;
+  --bg-3: #0f5364;
+  --bg-4: #156376;
+
+  --text-0: #fdf6e3;
+  --text-1: #93a1a1;
+  --text-2: #839496;
+
+  --accent: #b58900;
+  --accent-2: #cb9b1d;
+  --accent-soft: rgba(181, 137, 0, 0.18);
+  --accent-ring: rgba(181, 137, 0, 0.38);
+}
+
+/* Light solarized — the paper variant. Distinct theme name so users can
+   pick it explicitly, but kept here for symmetry with the dark one. */
+:root[data-theme-name="solarized-light"] {
+  --bg-0: #fdf6e3;
+  --bg-1: #eee8d5;
+  --bg-2: #e4ddc5;
+  --bg-3: #d6cfb2;
+  --bg-4: #c8c19f;
+
+  --text-0: #002b36;
+  --text-1: #073642;
+  --text-2: #586e75;
+
+  --accent: #b58900;
+  --accent-2: #cb9b1d;
+  --accent-soft: rgba(181, 137, 0, 0.18);
+  --accent-ring: rgba(181, 137, 0, 0.32);
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   forest — pine bark + leaf
+   ─────────────────────────────────────────────────────────── */
+:root[data-theme-name="forest"] {
+  --bg-0: #0d1410;
+  --bg-1: #131c17;
+  --bg-2: #1a261f;
+  --bg-3: #213128;
+  --bg-4: #2a3e33;
+
+  --text-0: #e8efe9;
+  --text-1: #b9c8bd;
+  --text-2: #7e8f83;
+
+  --accent: #6fbf73;
+  --accent-2: #8fd693;
+  --accent-soft: rgba(111, 191, 115, 0.14);
+  --accent-ring: rgba(111, 191, 115, 0.32);
+}

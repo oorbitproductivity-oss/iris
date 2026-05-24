@@ -1,0 +1,768 @@
+/* ═══════════════════════════════════════════════════════════
+   Chat View — Header, Messages, Composer
+   Codex pattern: assistant is a guide-rail column (no bubble);
+   user keeps a bubble; Iris gets a warm-tinted guide-rail.
+   ═══════════════════════════════════════════════════════════ */
+
+.chat-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+/* ─── Header ──────────────────────────────────────────────── */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-5);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-0);
+  flex-shrink: 0;
+  height: 56px;
+  min-height: 56px;
+}
+
+.chat-header-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-2);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  flex-shrink: 0;
+  position: relative;
+}
+.chat-header-mark svg { width: 14px; height: 14px; position: relative; z-index: 1; }
+
+.chat-header.iris .chat-header-mark {
+  background:
+    radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent-deep) 78%);
+  border-color: transparent;
+  color: #1a1308;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 6px 18px -6px var(--accent-glow);
+}
+.chat-header.iris .chat-header-mark::before {
+  /* Warm radial halo */
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.chat-header-text { flex: 1; min-width: 0; }
+.chat-header-name {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-0);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.chat-header.iris .chat-header-name .brand {
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.chat-header-sub {
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.005em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-header-sub .sub-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background: var(--accent-soft, rgba(96,165,250,0.14));
+  color: var(--accent-2, #93c5fd);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.chat-header-sub .sub-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text-2);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.chat-header-sub .sub-link:hover { color: var(--text-0); }
+
+/* Milestone timeline — append-only log of what happened in each window.
+   One line every 30s for the first 3 minutes, then once a minute. */
+.bubble .think-status-slot { /* empty container; populated by chat-view timer */ }
+.bubble .think-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 10px;
+  padding-left: 4px;
+  border-left: 1px solid var(--accent-ring-quiet, rgba(200,155,60,0.12));
+}
+.bubble .think-milestone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+  color: var(--text-2);
+  font-style: italic;
+  animation: fadeUpSmall 220ms var(--ease-out) both;
+  padding: 2px 0 2px 8px;
+}
+.bubble .think-milestone .think-tick {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  min-width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.bubble .think-milestone .think-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 5px var(--accent-glow);
+  flex-shrink: 0;
+}
+.bubble .think-milestone:last-child .think-dot {
+  animation: irisPulse 1.4s ease-in-out infinite;
+}
+.bubble .think-milestone .think-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ─── Scrollable log ──────────────────────────────────────── */
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-feed {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  flex: 1;
+}
+
+/* ─── Messages ────────────────────────────────────────────── */
+.msg {
+  display: flex;
+  width: 100%;
+  animation: irisFadeUp 220ms var(--ease-out) both;
+  user-select: text;
+}
+
+.msg.user { justify-content: flex-end; }
+
+.bubble {
+  max-width: 80ch;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 12px;
+  font-size: var(--text-md);
+  line-height: 1.65;
+  word-break: break-word;
+  position: relative;
+  letter-spacing: -0.005em;
+}
+
+/* User bubble — Codex keeps these */
+.msg.user .bubble {
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-border);
+  color: var(--text-0);
+  font-size: var(--text-base);
+}
+
+/* Assistant — guide-rail column, no bubble. The Codex move. */
+.msg.assistant .bubble {
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border-strong);
+  padding: 2px 0 2px var(--space-4);
+  border-radius: 0;
+  color: var(--text-1);
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Iris assistant — same column, warm rail + faint gradient blush */
+.msg.iris .bubble,
+.msg.assistant.iris .bubble {
+  background: linear-gradient(90deg, rgba(200, 155, 60, 0.05), transparent 40%);
+  border: none;
+  border-left: 2px solid var(--accent);
+  padding: 2px 0 2px var(--space-4);
+  border-radius: 0;
+  color: var(--text-1);
+}
+
+/* System messages — quiet center notes */
+.msg.system { justify-content: center; }
+.msg.system .bubble {
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  text-align: center;
+}
+
+/* Message author label */
+.msg-author {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.msg-author .author-mark {
+  /* The iris glyph for assistant messages — sits flush with the name. */
+  width: 16px;
+  height: 16px;
+  display: inline-grid;
+  place-items: center;
+  background: #0a0a0e;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(200, 155, 60, 0.18);
+}
+.msg-author .author-mark img,
+.msg-author .author-mark svg { width: 13px; height: 13px; object-fit: contain; display: block; }
+.msg.iris .msg-author { color: var(--accent); }
+.msg.iris .msg-author .author-mark { box-shadow: 0 0 0 1px var(--accent-ring); }
+
+/* ─── Markdown rendering inside assistant bubble ──────────── */
+.md p {
+  margin: var(--space-3) 0;
+  line-height: 1.6;
+  color: var(--text-0);
+}
+.md p:first-child { margin-top: 0; }
+.md p:last-child { margin-bottom: 0; }
+
+.md h1, .md h2, .md h3 {
+  margin: var(--space-5) 0 var(--space-2);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--text-0);
+  line-height: 1.25;
+}
+.md h1 { font-size: var(--text-xl); }
+.md h2 { font-size: var(--text-lg); }
+.md h3 { font-size: var(--text-md); }
+.md h1:first-child, .md h2:first-child, .md h3:first-child { margin-top: 0; }
+
+.md ul, .md ol {
+  padding-left: 22px;
+  margin: var(--space-3) 0;
+}
+.md li {
+  margin-bottom: 4px;
+  line-height: 1.6;
+  color: var(--text-0);
+}
+.md li::marker { color: var(--text-3); }
+
+.md a {
+  color: var(--accent-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md a:hover { color: var(--accent-bright); }
+
+.md strong { color: var(--text-0); font-weight: 600; }
+.md em { color: var(--text-0); font-style: italic; }
+
+/* Inline code */
+.md code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: var(--bg-2);
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--accent-2);
+  border: 1px solid var(--border);
+  font-feature-settings: normal;
+}
+
+/* Code blocks */
+.md pre {
+  margin: var(--space-3) 0;
+  border-radius: var(--radius-2);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+}
+.md pre code {
+  display: block;
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--text-0);
+  overflow-x: auto;
+  font-feature-settings: normal;
+}
+
+.md hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-4) 0;
+}
+
+/* Trailing TL;DR — every agent's final paragraph after a horizontal rule.
+   Slightly dimmed and tinted so it visually reads as a recap callout
+   rather than continuation of the main body. */
+.md hr + p {
+  color: var(--text-2);
+  font-size: 0.95em;
+  background: rgba(255, 255, 255, 0.025);
+  border-left: 2px solid var(--accent);
+  padding: 6px 10px;
+  border-radius: 2px;
+  margin-top: var(--space-2);
+}
+.md hr + p strong:first-child { color: var(--accent); }
+
+.md blockquote {
+  margin: var(--space-3) 0;
+  padding: 2px 0 2px var(--space-3);
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-2);
+  font-style: italic;
+}
+
+/* ─── Tool-call danger banner ─────────────────────────────── */
+.tool-card.tool-danger {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 1px rgba(192, 57, 43, 0.35);
+}
+.tool-danger-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(192, 57, 43, 0.18), rgba(192, 57, 43, 0.08));
+  border-bottom: 1px solid rgba(192, 57, 43, 0.45);
+  color: #ffd9d4;
+  font-size: var(--text-sm);
+}
+.tool-danger-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #c0392b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 13px;
+}
+.tool-danger-text { min-width: 0; flex: 1; }
+.tool-danger-title { font-weight: 600; color: #ffe0db; }
+.tool-danger-reason { color: #ffb8b0; font-size: var(--text-xs); margin-top: 2px; }
+
+/* ─── Tool-call cards ─────────────────────────────────────── */
+.tool-card {
+  margin: var(--space-2) 0 0;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  animation: fadeUpSmall 180ms var(--ease-out) both;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.tool-card:hover { border-color: var(--border-strong); }
+
+.tool-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.tool-head:hover { background: var(--bg-3); }
+
+.tool-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tool-icon.started {
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+.tool-icon.done { background: var(--green-soft); color: var(--green); }
+.tool-icon.error { background: var(--red-soft); color: var(--red); }
+.tool-icon svg { width: 11px; height: 11px; }
+
+.tool-spin {
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid var(--accent-soft);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.tool-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-0);
+  font-weight: 500;
+  flex-shrink: 0;
+  letter-spacing: -0.005em;
+}
+.tool-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+/* When collapsed, the header is intentionally bare — just status + tool name +
+   (optional filename pill) + chevron. The full input lives in the body and
+   only appears on expand. */
+.tool-card:not(.open) .tool-input { display: none; }
+.tool-card:not(.open) .tool-name { flex: 0 0 auto; }
+
+/* The clickable filename pill on Edit/Write/MultiEdit cards. Click expands
+   the diff inline (managed via .diff-open on the parent card). */
+.tool-filename {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  padding: 2px 8px 2px 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition:
+    background 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: 240px;
+  overflow: hidden;
+}
+.tool-filename:hover {
+  background: var(--bg-2);
+  border-color: var(--accent-soft);
+  color: var(--text-0);
+}
+.tool-filename-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tool-filename svg {
+  flex-shrink: 0;
+  color: var(--text-3);
+  transition: transform 220ms cubic-bezier(0.34, 1.32, 0.64, 1), color 180ms;
+}
+.tool-card.diff-open .tool-filename svg { transform: rotate(90deg); color: var(--accent-2); }
+.tool-card.diff-open .tool-filename {
+  background: var(--accent-soft);
+  border-color: var(--accent-2);
+  color: var(--text-0);
+}
+
+/* The diff viewer is hidden by default. The filename pill toggles
+   `.diff-open` on the card, which reveals the diff with a slide-down. */
+.tool-card .diff-viewer {
+  display: none;
+}
+.tool-card.diff-open .diff-viewer {
+  display: flex;
+  animation: diffSlideDown 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes diffSlideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* The small "open in editor" affordance inside the diff header. */
+.diff-open-editor {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--text-2);
+  cursor: pointer;
+  margin-left: 8px;
+  transition:
+    background 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 180ms cubic-bezier(0.34, 1.32, 0.64, 1);
+}
+.diff-open-editor:hover {
+  background: var(--bg-2);
+  color: var(--accent-2);
+}
+.diff-open-editor:active { transform: scale(0.92); }
+.tool-chev {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  background: transparent;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.tool-head:hover .tool-chev { background: var(--bg-2); color: var(--text-0); }
+.tool-card.open .tool-chev { transform: rotate(90deg); color: var(--accent-2); }
+.tool-chev svg { width: 14px; height: 14px; }
+
+.tool-head:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: -2px;
+}
+
+.tool-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: var(--space-3);
+  background: var(--bg-1);
+}
+.tool-card.open .tool-body { display: block; }
+.tool-body pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--text-1);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.tool-result-label {
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tool-body pre.tool-result {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  color: var(--text-0);
+}
+
+/* ─── Streaming cursor (subtle hint only) ────────────────── */
+.cursor {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--text-2);
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-left: 6px;
+  opacity: 0.6;
+  animation: cursorBlink 1.4s ease-in-out infinite;
+}
+.msg.iris .cursor,
+.msg.assistant .cursor { background: var(--text-2); }
+
+/* ─── Composer ────────────────────────────────────────────── */
+.composer-wrap {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-5) var(--space-5);
+  background: var(--bg-0);
+}
+.composer-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-3);
+  padding: var(--space-2);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.composer:focus-within {
+  border-color: var(--border-strong);
+  background: var(--bg-2);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.composer textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--text-0);
+  caret-color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1.55;
+  padding: var(--space-2) var(--space-3);
+  max-height: 220px;
+  min-height: 22px;
+  user-select: text;
+  letter-spacing: -0.005em;
+}
+.composer textarea::placeholder { color: var(--text-3); }
+.composer textarea:disabled { color: var(--text-3); }
+
+.composer-send {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-2);
+  background: linear-gradient(180deg, var(--accent-2) 0%, var(--accent) 100%);
+  color: #1a1308;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 4px 12px -4px var(--accent-glow);
+}
+.composer-send:hover:not(:disabled) {
+  background: linear-gradient(180deg, #efc873 0%, var(--accent-2) 100%);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.14),
+    0 8px 18px -4px var(--accent-glow);
+}
+.composer-send:active:not(:disabled) { transform: translateY(0); }
+.composer-send:disabled { opacity: 0.35; cursor: not-allowed; }
+.composer-send svg { width: 14px; height: 14px; }
+
+.composer-hint {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  margin-top: var(--space-2);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.composer-hint kbd {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-2);
+}
+
+/* Busy row */
+.busy-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 6px 0;
+  font-size: var(--text-xs);
+  color: var(--text-3);
+}
+.busy-row .dots {
+  display: inline-flex;
+  gap: 3px;
+}
+.busy-row .dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: irisPulse 1.2s ease-in-out infinite;
+}
+.busy-row .dots span:nth-child(2) { animation-delay: 0.15s; }
+.busy-row .dots span:nth-child(3) { animation-delay: 0.3s; }

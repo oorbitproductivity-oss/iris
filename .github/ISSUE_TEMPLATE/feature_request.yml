@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest a new feature or improvement.
+title: "[feature] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a feature. The best requests start with the problem, not the solution — describe the workflow you're trying to support, then your idea for how to make it work.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence pitch.
+      placeholder: "Allow pinning agents to the top of the sidebar."
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow is awkward today? Be specific.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you build it? Sketches and pseudo-screenshots welcome.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about and why you rejected them.
+  - type: dropdown
+    id: contrib
+    attributes:
+      label: Are you willing to contribute?
+      options:
+        - Yes — I can write the code
+        - Yes — I can write docs or test
+        - Maybe — I'd need some pointers
+        - No — just an idea

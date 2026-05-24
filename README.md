@@ -1,7 +1,7 @@
 # Iris Code
 
 [![MIT License](https://img.shields.io/badge/license-MIT-c89b3c.svg)](LICENSE)
-[![Open source](https://img.shields.io/badge/open--source-yes-c89b3c.svg)](https://github.com/oorbitproductivity-oss/iriscode)
+[![Open source](https://img.shields.io/badge/open--source-yes-c89b3c.svg)](https://github.com/oorbitproductivity-oss/iris)
 
 > The god of sub-messaging. A premium open-source desktop GUI for Claude Code with a Spotlight-style master orchestrator (Iris), parallel sub-agents, a command palette, workflow templates, conversation export, a live stats dashboard, themes, voice input, tags, a diff viewer, a memory editor, plan mode, sandboxed working directories, per-chat API keys, and a polished dark theme.
 
@@ -60,7 +60,7 @@ Iris Code wraps the Claude Code CLI in a desktop app that gives you two ways to 
 - **Read the guide**: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - **Be excellent to each other**: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 - **Found a security issue?** See [`SECURITY.md`](SECURITY.md). Please email — don't open a public issue.
-- **Join the community**: [GitHub Discussions](https://github.com/oorbitproductivity-oss/iriscode/discussions)
+- **Join the community**: [GitHub Discussions](https://github.com/oorbitproductivity-oss/iris/discussions)
 
 ## Requirements
 
@@ -77,6 +77,10 @@ npm start            # production mode
 npm run dev          # DevTools + console forwarding (--dev flag)
 npm test             # backend smoke test (real claude subprocess + key vault + sandbox)
 ```
+
+## Releasing
+
+End-to-end build → upload → deploy → verify recipe is in [`docs/release.md`](docs/release.md). Read it before cutting a Windows release — it covers the per-arch rename dance, hash regeneration, GitHub release upload, Cloudflare Pages deploy, and the two known issues (long-description shortcut corruption, SmartScreen on the unsigned exe).
 
 ## Keyboard shortcuts
 

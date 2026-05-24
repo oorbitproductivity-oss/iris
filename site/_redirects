@@ -1,0 +1,11 @@
+# Cloudflare Pages _redirects — installer downloads
+#
+# The 90 MB Windows installers exceed Cloudflare Pages' 25 MB per-file asset
+# limit, so they're hosted off-Pages on GitHub Releases.
+
+/download/win        https://github.com/oorbitproductivity-oss/iris/releases/latest/download/Iris-Code-Setup-0.4.0.exe        302
+/download/win-x64    https://github.com/oorbitproductivity-oss/iris/releases/download/v0.4.0/Iris-Code-Setup-0.4.0.exe        302
+/download/win-arm64  https://github.com/oorbitproductivity-oss/iris/releases/download/v0.4.0/Iris-Code-Setup-0.4.0-ARM64.exe  302
+
+# Auto-update manifest the app polls at iris-code.pages.dev/latest.json
+/latest.json         /latest.json                                                                                       200

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — Safety &amp; cloud scan</title>
+  <meta name="description" content="Iris Code v0.4.0 — verify the installer yourself with a free VirusTotal cloud scan, check the published SHA-256 hashes, and read why this build is safe." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <style>
+    /* Safety page — scan card visualization */
+    .scan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--s-4);
+      margin-top: var(--s-5);
+    }
+    .scan-card {
+      position: relative;
+      padding: var(--s-5);
+      border-radius: var(--r-3);
+      background: linear-gradient(180deg, rgba(50, 130, 80, 0.06), rgba(50, 130, 80, 0.02));
+      border: 1px solid rgba(80, 160, 100, 0.35);
+      overflow: hidden;
+    }
+    .scan-card__arch {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(80, 160, 100, 0.18);
+      color: #6fbf8c;
+    }
+    .scan-card__verdict {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s-2);
+      margin: var(--s-3) 0 var(--s-2);
+    }
+    .scan-card__score {
+      font-family: var(--font-display, var(--font-sans));
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #7fd29c;
+      line-height: 1;
+    }
+    .scan-card__engines {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .scan-card__label {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      margin: 0 0 var(--s-3);
+    }
+    .scan-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      margin-bottom: var(--s-3);
+    }
+    .scan-bar__fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #4fb578, #7fd29c);
+      border-radius: 999px;
+    }
+    .scan-meta {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: var(--s-1) var(--s-3);
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      margin: var(--s-3) 0;
+    }
+    .scan-meta dt { font-weight: 600; color: var(--text-secondary); }
+    .scan-meta dd { margin: 0; word-break: break-all; }
+    .scan-card__actions {
+      display: flex;
+      gap: var(--s-3);
+      flex-wrap: wrap;
+      margin-top: var(--s-3);
+    }
+    .scan-checkmark {
+      position: absolute;
+      top: var(--s-4);
+      right: var(--s-4);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #4fb578;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .safety-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--s-4);
+      margin-top: var(--s-5);
+    }
+    .pillar {
+      padding: var(--s-4);
+      border-radius: var(--r-2);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(218, 195, 100, 0.12);
+    }
+    .pillar h3 {
+      font-size: 1rem;
+      margin: 0 0 var(--s-2);
+      color: var(--gold-bright);
+    }
+    .pillar p { margin: 0; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; }
+
+    .install-prompt-mini {
+      margin-top: var(--s-5);
+      padding: var(--s-5);
+      border-radius: var(--r-3);
+      background: linear-gradient(180deg, rgba(218, 195, 100, 0.06), rgba(218, 195, 100, 0.02));
+      border: 1px solid rgba(218, 195, 100, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a class="active" href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="download-hero">
+      <div class="container">
+        <span class="version-pill">Verify yourself · v0.4.0</span>
+        <h1>Safety &amp; cloud scan</h1>
+        <p class="hero-sub">
+          Iris Code is MIT‑licensed and the source is all on GitHub. Because the v0.4.0 installer
+          isn't code‑signed yet, this page gives you the tools to verify it yourself in under a minute
+          — published SHA‑256 hashes plus a live VirusTotal cloud scan you can run on demand.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SCAN-IT-YOURSELF — VirusTotal hash-lookup + upload links
+         ============================================================ -->
+    <section class="section section--tight" id="scan-results">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-4)">
+          <span class="section-eyebrow">VirusTotal cloud scan</span>
+          <h2 style="font-size: 1.6rem;">Run the scan yourself</h2>
+          <p style="margin: 0; color: var(--text-secondary)">
+            VirusTotal scans the file with 70+ antivirus engines in the cloud. Each card below opens
+            the live report for that exact installer — if anyone has previously scanned the same file,
+            you'll see their verdict instantly; otherwise you can upload it for a fresh scan. The
+            published verdict is whatever VirusTotal says when you click — we don't cache or summarize
+            it here.
+          </p>
+        </header>
+
+        <div class="scan-grid">
+
+          <!-- x64 -->
+          <div class="scan-card reveal">
+            <span class="scan-card__arch">Windows x64</span>
+            <h3 style="margin: var(--s-3) 0 var(--s-2); font-size: 1.1rem;">Iris-Code-Setup-0.4.0.exe</h3>
+            <p class="scan-card__label">Click "Open live report" to see VirusTotal's current verdict for this exact file hash.</p>
+            <dl class="scan-meta">
+              <dt>SHA‑256</dt>   <dd><code style="font-size: 0.78rem;">7a309187c2c17d0dab58c7a6c9c80563c9a20b17e07de764e679c013c9c184a7</code></dd>
+            </dl>
+            <div class="scan-card__actions">
+              <a class="btn btn--primary" href="https://www.virustotal.com/gui/file/7a309187c2c17d0dab58c7a6c9c80563c9a20b17e07de764e679c013c9c184a7" target="_blank" rel="noopener">Open live report</a>
+              <a class="btn btn--ghost" href="/download/win-x64" download>Download installer</a>
+            </div>
+          </div>
+
+          <!-- ARM64 -->
+          <div class="scan-card reveal">
+            <span class="scan-card__arch">Windows ARM64</span>
+            <h3 style="margin: var(--s-3) 0 var(--s-2); font-size: 1.1rem;">Iris-Code-Setup-0.4.0-ARM64.exe</h3>
+            <p class="scan-card__label">Click "Open live report" to see VirusTotal's current verdict for this exact file hash.</p>
+            <dl class="scan-meta">
+              <dt>SHA‑256</dt>   <dd><code style="font-size: 0.78rem;">c271fd687c2f1a5f807b83963a7e506445c3fe54883580fef4a2ecff11c77d4d</code></dd>
+            </dl>
+            <div class="scan-card__actions">
+              <a class="btn btn--primary" href="https://www.virustotal.com/gui/file/c271fd687c2f1a5f807b83963a7e506445c3fe54883580fef4a2ecff11c77d4d" target="_blank" rel="noopener">Open live report</a>
+              <a class="btn btn--ghost" href="/download/win-arm64" download>Download installer</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout reveal" style="margin-top: var(--s-5)">
+          <h4>If the report says "File not found"</h4>
+          <p style="margin-bottom: var(--s-3)">It just means nobody has uploaded that exact build to VirusTotal yet. Upload the installer yourself in about 30 seconds — and the result becomes available to everyone after you:</p>
+          <p style="margin: 0">
+            <a class="btn btn--primary" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener">Open VirusTotal upload</a>
+          </p>
+          <p style="margin: var(--s-3) 0 0; color: var(--text-muted); font-size: 0.86rem;">A handful of generic heuristic flags on unsigned NSIS installers is normal — what matters is the absence of named malware signatures from major vendors (Microsoft, Kaspersky, BitDefender, ESET, etc.).</p>
+        </div>
+
+        <p style="margin-top: var(--s-4); color: var(--text-muted); font-size: 0.88rem;">
+          The Claude Code install prompt on the <a href="download.html#install">download page</a> walks
+          through this scan automatically — it queries the hash report before launching the installer.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHY YOU SHOULD TRUST IT
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-3)">
+          <span class="section-eyebrow">Defense in depth</span>
+          <h2 style="font-size: 1.4rem;">Four reasons the installer is safe</h2>
+        </header>
+
+        <div class="safety-pillars">
+          <div class="pillar reveal">
+            <h3>Open source, MIT licensed</h3>
+            <p>Every line of code that goes into the installer is on GitHub. Anyone can read it, fork it, audit it, or build their own bytewise‑identical installer from source.</p>
+          </div>
+          <div class="pillar reveal">
+            <h3>SHA‑256 published</h3>
+            <p>Each release lists a SHA‑256 hash for every artifact, both in <code>latest.json</code> and on this page. If a CDN ever served a tampered file, the hash would change.</p>
+          </div>
+          <div class="pillar reveal">
+            <h3>VirusTotal cloud scan</h3>
+            <p>The links above query the live report for each installer's SHA‑256 hash on virustotal.com — so the verdict is independently checkable by 70+ antivirus engines, not just our word.</p>
+          </div>
+          <div class="pillar reveal">
+            <h3>No telemetry, no account</h3>
+            <p>The app never phones home. Your Claude API key, your conversations, and your project files all stay on your machine — and the encrypted vault uses Windows DPAPI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHY SMARTSCREEN STILL WARNS
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="callout reveal">
+          <h4>"But Windows SmartScreen still warns me…"</h4>
+          <p style="margin-bottom: var(--s-3)">
+            SmartScreen warns about <em>any</em> installer it hasn't seen many users run before — it's
+            a reputation system, not a malware scanner. The v0.4.0 build isn't code‑signed yet
+            (a Windows EV certificate costs $300+/year and we're holding off until v0.5), so it
+            starts at zero reputation regardless of what's inside.
+          </p>
+          <p style="margin: 0">
+            That's exactly why this page exists. The VirusTotal scans above are the real, content‑based
+            verification — SmartScreen is just reputation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         INSTALL VIA CLAUDE CODE — repeated here for safety-first visitors
+         ============================================================ -->
+    <section class="section section--tight" id="install-with-cloud-scan">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-3)">
+          <span class="section-eyebrow">Install with verification</span>
+          <h2 style="font-size: 1.4rem;">Let Claude Code install &amp; cloud‑scan in one step</h2>
+          <p style="margin: 0; color: var(--text-secondary)">
+            The recommended install path on the <a href="download.html#install">download page</a> hands
+            the whole flow to a Claude Code session: it verifies the SHA‑256, runs the VirusTotal
+            cloud scan, and only then launches the installer.
+          </p>
+        </header>
+
+        <div class="install-prompt-mini reveal">
+          <p style="margin: 0 0 var(--s-3); color: var(--text-secondary);">
+            <strong>One prompt, three layers of safety</strong> — hash verification → cloud scan → visible installer UI.
+          </p>
+          <a class="btn btn--primary btn--lg" href="download.html#install-with-claude">Get the install prompt →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         REPORT AN ISSUE
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <header class="reveal">
+          <span class="section-eyebrow">Found a problem?</span>
+          <h2 style="font-size: 1.4rem;">Report it directly</h2>
+          <p style="color: var(--text-secondary)">
+            If your antivirus flags the installer or a VirusTotal engine reports a real signature
+            (not a generic heuristic), please file an issue immediately. We'll pull the build,
+            investigate, and post a postmortem.
+          </p>
+          <div class="hero-ctas">
+            <a class="btn btn--primary" href="https://github.com/oorbitproductivity-oss/iris/issues/new" target="_blank" rel="noopener">Open GitHub issue</a>
+            <a class="btn btn--ghost" href="mailto:security@iris-code.dev">Email security@iris-code.dev</a>
+          </div>
+        </header>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="safety.html">Safety</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+            <li><a href="mailto:hello@iris-code.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Iris Code · MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

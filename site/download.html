@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — Download</title>
+  <meta name="description" content="Download Iris Code v0.4.0 for Windows. Free, MIT licensed. Verified SHA-256 checksums and free VirusTotal cloud scan for the unsigned installer. Requires the Claude Code CLI." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a class="active" href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="download-hero">
+      <div class="container">
+        <div class="download-ring">
+          <img src="assets/iris-icon.png" alt="" aria-hidden="true" />
+        </div>
+        <span class="version-pill">v0.4.0 · MAY 2026</span>
+        <h1>Iris <span class="wordmark">Code</span></h1>
+        <p class="hero-sub">
+          The god of sub-messaging — packaged as a calm, fast Windows desktop app.
+          Free, MIT licensed, no account required.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="/download/win-x64" download>
+            Download for Windows (x64)
+          </a>
+          <a class="btn btn--ghost btn--lg" href="/download/win-arm64" download>
+            Download for Windows (ARM64)
+          </a>
+          <a class="btn btn--ghost" href="#install">Install instructions</a>
+        </div>
+        <p class="hero-meta">≈ 90 MB · Windows 10 / 11 · NSIS installer · v0.4.0 on x64 and ARM64</p>
+        <p class="hero-meta" style="margin-top: var(--s-2)">Not sure? Press <kbd>Win</kbd>+<kbd>Pause</kbd> — if "System type" says <strong>ARM-based PC</strong>, choose ARM64; otherwise choose x64.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PLATFORMS
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-4)">
+          <span class="section-eyebrow">Other platforms</span>
+          <h2 style="font-size: 1.4rem;">Mac &amp; Linux coming soon</h2>
+          <p style="margin: 0; color: var(--text-muted)">Native builds for macOS and Linux are landing in v0.4. Sign up on GitHub for release notifications.</p>
+        </header>
+        <div class="platforms">
+          <div class="platform-card">
+            <span class="os">Windows 10 / 11 · x64</span>
+            <span class="availability">Available · NSIS installer</span>
+          </div>
+          <div class="platform-card platform-card--soon">
+            <span class="os">macOS</span>
+            <span class="availability">v0.5 · signed DMG</span>
+          </div>
+          <div class="platform-card platform-card--soon">
+            <span class="os">Linux</span>
+            <span class="availability">v0.5 · AppImage / deb</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PREREQUISITES CALLOUT
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="callout reveal">
+          <h4>Before you install</h4>
+          <p>
+            Iris Code drives the official Claude Code CLI under the hood. You'll need it installed
+            and authenticated <em>before</em> first launch. From a terminal, run:
+          </p>
+          <pre style="margin-top: var(--s-3)"><code>npm install -g @anthropic-ai/claude-code
+claude auth login</code></pre>
+          <p style="margin-top: var(--s-3)">
+            Full instructions are in the
+            <a href="https://docs.claude.com/en/docs/claude-code" target="_blank" rel="noopener">Claude Code documentation</a>.
+            Iris Code detects the CLI automatically on first launch.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         INSTALL — TWO OPTIONS
+         ============================================================ -->
+    <section class="section" id="install">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-5)">
+          <span class="section-eyebrow">Installation</span>
+          <h2>Two ways to install. Pick whichever feels easier.</h2>
+          <p class="section-lead">Hand the install to Claude Code and let it do the work, or follow the five‑step guide yourself.</p>
+        </header>
+
+        <!-- Option A — Let Claude Code do it -->
+        <div class="install-option install-option--featured reveal" id="install-with-claude">
+          <div class="install-option__head">
+            <span class="install-option__tag">Option A · Recommended</span>
+            <h3>Let Claude Code install it for you</h3>
+            <p>
+              Copy the prompt below, paste it into a fresh Claude Code session, and Claude will
+              detect your CPU, fetch the right installer, verify the SHA‑256, run a free
+              <a href="#cloud-scan">VirusTotal cloud scan</a>, run the setup, and walk you through
+              the first‑run wizard. It uses your machine — no remote actions.
+            </p>
+          </div>
+
+          <div class="prompt-block">
+            <button type="button" class="copy-btn" data-copy-target="install-prompt" aria-label="Copy install prompt">
+              <span class="copy-btn__label">Copy prompt</span>
+            </button>
+            <pre><code id="install-prompt">Please install Iris Code (a desktop GUI for the Claude Code CLI) on this Windows machine. Work step-by-step on my system and ask before any destructive action.
+
+1. Detect my CPU architecture in PowerShell:
+     (Get-CimInstance Win32_Processor).Architecture
+   9 = x64, 12 = ARM64. Tell me which you found.
+
+2. Verify prerequisites:
+   - node --version  (need Node.js >= 18; if missing, point me to https://nodejs.org/)
+   - claude --version  (if missing, run: npm install -g @anthropic-ai/claude-code, then ask me to run `claude auth login` interactively in my own terminal)
+
+3. Fetch the release manifest to learn the current version and download URL:
+     Invoke-RestMethod https://iris-code.pages.dev/latest.json
+   Pick windows.x64 or windows.arm64 based on step 1.
+
+4. Download the installer to my Downloads folder:
+     Invoke-WebRequest -Uri <url-from-manifest> -OutFile "$env:USERPROFILE\Downloads\Iris-Code-Setup.exe"
+
+5. Verify the SHA-256:
+     (Get-FileHash "$env:USERPROFILE\Downloads\Iris-Code-Setup.exe" -Algorithm SHA256).Hash
+   It must match the sha256 in the manifest. If it doesn't match, STOP and tell me.
+
+6. Cloud-scan the installer before running it (recommended, since v0.4 isn't code-signed yet). Upload the file to VirusTotal so 70+ antivirus engines scan it in the cloud:
+     Start-Process "https://www.virustotal.com/gui/home/upload"
+   Tell me to drag the .exe from my Downloads folder into the upload box. Wait for me to confirm the report is clean (a few harmless heuristic flags on unsigned NSIS installers are normal — but any real malware signature means STOP). Alternatively, query the report by hash without uploading:
+     Start-Process "https://www.virustotal.com/gui/file/$((Get-FileHash "$env:USERPROFILE\Downloads\Iris-Code-Setup.exe" -Algorithm SHA256).Hash.ToLower())"
+
+7. Launch the installer:
+     Start-Process "$env:USERPROFILE\Downloads\Iris-Code-Setup.exe"
+   Warn me first that Windows SmartScreen will show a blue prompt — I should click "More info" then "Run anyway", accept the UAC prompt, and keep the default install location.
+
+8. After the installer closes, confirm install by checking:
+     Test-Path "$env:LOCALAPPDATA\Programs\iris-code\Iris Code.exe"
+   If true, offer to launch it for me.
+
+9. Walk me through the first-run wizard: it auto-detects the `claude` CLI, lets me store an API key in the encrypted vault, and shows a keyboard-shortcut tour.
+
+Do not skip the hash verification. Do not skip the cloud scan. Do not run the installer silently — I want to see the UI.</code></pre>
+          </div>
+
+          <p class="install-option__hint">
+            Don't have Claude Code yet? Install it first with
+            <code>npm install -g @anthropic-ai/claude-code</code>, then
+            <code>claude</code> in your project folder and paste the prompt.
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <div class="install-or reveal" aria-hidden="true">
+          <span>or</span>
+        </div>
+
+        <!-- Option B — Manual install -->
+        <div class="install-option reveal" id="install-manually">
+          <div class="install-option__head">
+            <span class="install-option__tag install-option__tag--ghost">Option B</span>
+            <h3>Install it manually — five quiet steps</h3>
+            <p>Prefer to do it yourself? Follow the steps below.</p>
+          </div>
+
+          <ol class="steps">
+            <li class="reveal">
+              <h4>Pick the right installer for your CPU</h4>
+              <p>Most Windows laptops and desktops are <strong>x64</strong> (Intel / AMD) — click the gold button to download <code>Iris Code Setup 0.4.0.exe</code>. If you're on a Surface Pro X, a Copilot+ PC, or another Snapdragon / ARM machine, use the <strong>ARM64</strong> button instead — that downloads <code>Iris Code Setup 0.4.0 (ARM64).exe</code>.</p>
+            </li>
+            <li class="reveal">
+              <h4>Run the installer</h4>
+              <p>Double‑click the <code>.exe</code>. Windows will ask for permission to make changes — accept.</p>
+            </li>
+            <li class="reveal">
+              <h4>Pass the SmartScreen warning</h4>
+              <p>
+                Because v0.4.0 isn't code‑signed yet, Microsoft Defender SmartScreen may show a blue prompt.
+                Click <strong>More info</strong>, then <strong>Run anyway</strong>. Signed builds are
+                scheduled for v0.5. If you'd like extra reassurance before clicking through, jump to
+                <a href="#cloud-scan">Cloud scan</a> below — you can have 70+ antivirus engines verify
+                the installer in under a minute.
+              </p>
+            </li>
+            <li class="reveal">
+              <h4>Choose an install location</h4>
+              <p>The default is fine. Iris Code installs into your user profile, so admin rights aren't required.</p>
+            </li>
+            <li class="reveal">
+              <h4>Launch &amp; complete the first‑run wizard</h4>
+              <p>
+                On first launch, the wizard checks for the <code>claude</code> CLI, lets you store
+                an API key in the encrypted vault, and offers a tour of the keyboard shortcuts.
+                Two minutes and you're in.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CLOUD SCAN
+         ============================================================ -->
+    <section class="section section--tight" id="cloud-scan">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-4)">
+          <span class="section-eyebrow">Extra peace of mind</span>
+          <h2 style="font-size: 1.4rem;">Cloud-scan the installer in under a minute</h2>
+          <p style="margin: 0; color: var(--text-secondary)">Because v0.4.0 isn't code‑signed yet, Windows SmartScreen will warn you. If you'd like independent confirmation that the file is clean, run it past <strong>VirusTotal</strong> — a free service that scans your upload with 70+ antivirus engines in the cloud.</p>
+        </header>
+
+        <div class="callout reveal">
+          <h4>Option 1 — Scan by hash (no upload)</h4>
+          <p style="margin-bottom: var(--s-3)">If someone else has already uploaded the same installer, VirusTotal will show the existing report instantly. Open one of these direct links:</p>
+          <p style="margin-bottom: var(--s-3)">
+            <a href="https://www.virustotal.com/gui/file/7a309187c2c17d0dab58c7a6c9c80563c9a20b17e07de764e679c013c9c184a7" target="_blank" rel="noopener">VirusTotal report — x64 installer</a><br />
+            <a href="https://www.virustotal.com/gui/file/c271fd687c2f1a5f807b83963a7e506445c3fe54883580fef4a2ecff11c77d4d" target="_blank" rel="noopener">VirusTotal report — ARM64 installer</a>
+          </p>
+          <p style="margin: 0; color: var(--text-muted); font-size: 0.88rem;">If the report says "File not found", nobody has scanned this build yet — use Option 2 to upload it (which also helps everyone who comes after you).</p>
+        </div>
+
+        <div class="callout reveal" style="margin-top: var(--s-4)">
+          <h4>Option 2 — Upload &amp; scan</h4>
+          <p style="margin-bottom: var(--s-3)">Drop the downloaded <code>.exe</code> straight into VirusTotal's upload box and wait ~30 seconds for the verdict.</p>
+          <p style="margin: 0">
+            <a class="btn btn--primary" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener">Open VirusTotal upload</a>
+          </p>
+          <p style="margin: var(--s-3) 0 0; color: var(--text-muted); font-size: 0.86rem;">A small number of heuristic flags on unsigned NSIS installers is normal. What you're looking for is the absence of named malware signatures (e.g. anything from Microsoft, Kaspersky, BitDefender, ESET). If you see real detections, <strong>don't run the file</strong> — open a GitHub issue and we'll investigate.</p>
+        </div>
+
+        <p style="margin-top: var(--s-4); color: var(--text-secondary);">
+          Looking for the full scan report at a glance? <a href="safety.html">Open the Safety page</a> — it's a built-in dashboard that shows the latest VirusTotal verdict, file sizes, and live links.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CHECKSUMS
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-3)">
+          <span class="section-eyebrow">Verify your download</span>
+          <h2 style="font-size: 1.4rem;">Checksums</h2>
+          <p style="margin: 0; color: var(--text-secondary)">Confirm the installer hasn't been tampered with. Compare against these published hashes.</p>
+        </header>
+        <div class="card reveal">
+          <table class="checksum-table">
+            <thead>
+              <tr>
+                <th>Artifact</th>
+                <th>Algorithm</th>
+                <th>Hash</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Iris Code Setup 0.4.0.exe <span class="chip">x64</span></td>
+                <td>SHA‑256</td>
+                <td><code style="font-size: 0.78rem; word-break: break-all;">7a309187c2c17d0dab58c7a6c9c80563c9a20b17e07de764e679c013c9c184a7</code></td>
+              </tr>
+              <tr>
+                <td>Iris Code Setup 0.4.0 (ARM64).exe <span class="chip">arm64</span></td>
+                <td>SHA‑256</td>
+                <td><code style="font-size: 0.78rem; word-break: break-all;">c271fd687c2f1a5f807b83963a7e506445c3fe54883580fef4a2ecff11c77d4d</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin: var(--s-3) 0 0; color: var(--text-muted); font-size: 0.86rem;">To verify locally on Windows: <code>Get-FileHash .\"Iris Code Setup 0.4.0.exe" -Algorithm SHA256</code>. Hashes are also published in <code>SHA256SUMS.txt</code> alongside the installer on the GitHub release page.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         RELEASE NOTES
+         ============================================================ -->
+    <section class="section" id="changelog">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-5)">
+          <span class="section-eyebrow">Release notes</span>
+          <h2>What's new in v0.4.0 — Telegram Remote Agent</h2>
+          <p class="section-lead">One headline feature: DM your personal Telegram bot to drive Claude Code on your desktop, from anywhere.</p>
+        </header>
+
+        <div class="changelog">
+          <div class="dl-info-grid">
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">Telegram Remote Agent</h3>
+              <p>Bring-your-own-bot — one user, one bot, no shared infrastructure. Token encrypted at rest via Electron <code>safeStorage</code> with an AES-GCM fallback.</p>
+            </div>
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">6-digit pairing flow</h3>
+              <p>No copy-pasting chat IDs. Type one code in Telegram and the bridge locks to your account.</p>
+            </div>
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">Per-chat allowlist</h3>
+              <p>Inbound messages from any other chat are dropped silently. Enforced on every single update.</p>
+            </div>
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">Auto-reconnect</h3>
+              <p>Exponential backoff on network or Bot API failures. Survives flaky hotel Wi-Fi and Telegram outages.</p>
+            </div>
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">MarkdownV2 replies</h3>
+              <p>Agent output is properly escaped and chunked at Telegram's 4096-character ceiling — no broken formatting, no truncated messages.</p>
+            </div>
+            <div class="card reveal">
+              <span class="chip chip--new">added</span>
+              <h3 style="margin-top: var(--s-3)">Slash commands</h3>
+              <p><code>/new</code> resets context, <code>/stop</code> cancels the current run. The bot speaks the same language as the desktop UI.</p>
+            </div>
+          </div>
+
+          <hr />
+
+          <h3 style="font-family: var(--font-sans)">Under the hood</h3>
+          <ul>
+            <li><strong>New module</strong> — <code>lib/telegram/</code> (<code>index.js</code>, <code>api.js</code>, <code>markdown.js</code>). Pure Node <code>https</code>; zero new runtime dependencies.</li>
+            <li><strong>Token at rest</strong> — its own <code>telegram-token.json</code> (chmod 600 on POSIX) so encryption-backend changes can't corrupt unrelated settings.</li>
+            <li><strong>New settings key</strong> — <code>telegram</code> (<code>enabled</code>, <code>botUsername</code>, <code>allowedChatId</code>, <code>chatAgentId</code>). The bot token itself never touches <code>settings.json</code>.</li>
+            <li><strong>New IPC surface</strong> — <code>telegram:status</code>, <code>telegram:set-token</code>, <code>telegram:start-pairing</code>, <code>telegram:test-message</code>, plus a <code>ui:telegram-status</code> push event for live panel updates.</li>
+            <li><strong>New onboarding step</strong> — "Set up with Telegram for easy agent access (optional)" — deep-links to the panel.</li>
+            <li><strong>15 new tests</strong> — <code>tests/telegram.test.js</code> covers MarkdownV2 escaping, chunking, pairing, allowlist, agent routing.</li>
+            <li><strong>New doc</strong> — <code>docs/telegram.md</code>.</li>
+          </ul>
+
+          <h3 style="font-family: var(--font-sans); margin-top: var(--s-5)">Compatibility</h3>
+          <ul>
+            <li>v0.3.0 settings auto-upgrade. The <code>telegram</code> block defaults to disabled, no token, no paired chat — existing users see no behavior change until they enable the bridge.</li>
+          </ul>
+
+          <h3 style="font-family: var(--font-sans); margin-top: var(--s-5)">Known limitations</h3>
+          <ul>
+            <li>Installer is not yet code‑signed. SmartScreen will warn — signing is scheduled for v0.5.</li>
+            <li>Both x64 and ARM64 are available for v0.4.0 — pick the one that matches your CPU.</li>
+            <li>macOS and Linux native builds are scheduled for v0.5.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="cta-strip reveal">
+        <h2>Ready when you are.</h2>
+        <p>v0.4.0 is the most reachable version yet — your desktop, in your pocket. Try it for an hour.</p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="/download/win-x64" download>Download for Windows (x64)</a>
+          <a class="btn btn--ghost btn--lg" href="/download/win-arm64" download>Download for Windows (ARM64)</a>
+          <a class="btn btn--ghost" href="docs.html">Read the docs</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="product.html#roadmap">Roadmap</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+            <li><a href="mailto:hello@iris-code.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Iris Code · MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.copy-btn[data-copy-target]');
+      buttons.forEach((btn) => {
+        const labelEl = btn.querySelector('.copy-btn__label');
+        const original = labelEl ? labelEl.textContent : 'Copy';
+        btn.addEventListener('click', async () => {
+          const target = document.getElementById(btn.dataset.copyTarget);
+          if (!target) return;
+          const text = target.innerText;
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch (err) {
+            const range = document.createRange();
+            range.selectNodeContents(target);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            try { document.execCommand('copy'); } catch (_) {}
+            sel.removeAllRanges();
+          }
+          btn.classList.add('is-copied');
+          if (labelEl) labelEl.textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('is-copied');
+            if (labelEl) labelEl.textContent = original;
+          }, 1800);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

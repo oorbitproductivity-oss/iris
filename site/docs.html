@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iris Code — Documentation</title>
+  <meta name="description" content="Iris Code documentation. Getting started, the Spotlight overlay, threads and agents, command palette, templates, snippets, shortcuts, troubleshooting, and FAQ." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a class="active" href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container">
+      <header style="padding: var(--s-7) 0 var(--s-3)">
+        <span class="section-eyebrow">Documentation</span>
+        <h1 style="font-size: clamp(2rem, 4vw, 3.2rem); margin-bottom: var(--s-3)">Iris Code · v0.4.0</h1>
+        <p class="section-lead" style="margin-bottom: 0">
+          Everything you need to install, configure, and live in Iris Code. Use the table of contents
+          on the left to jump around, or read top to bottom in about fifteen minutes.
+        </p>
+      </header>
+
+      <div class="docs-layout">
+
+        <!-- ============================================================
+             TOC (desktop)
+             ============================================================ -->
+        <aside class="docs-toc" aria-label="Documentation contents">
+          <h4>Contents</h4>
+          <ol>
+            <li><a href="#getting-started">Getting started</a></li>
+            <li><a href="#overlay">The Iris overlay</a></li>
+            <li><a href="#threads">Threads &amp; agents</a></li>
+            <li><a href="#palette">Command palette</a></li>
+            <li><a href="#templates">Workflow templates</a></li>
+            <li><a href="#snippets">Prompt snippets</a></li>
+            <li><a href="#pins">Pinning &amp; notifications</a></li>
+            <li><a href="#stats">Stats dashboard</a></li>
+            <li><a href="#export">Conversation export</a></li>
+            <li><a href="#shortcuts">Keyboard shortcuts</a></li>
+            <li><a href="#keys">API keys &amp; encryption</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ol>
+        </aside>
+
+        <!-- ============================================================
+             CONTENT
+             ============================================================ -->
+        <article class="docs-content">
+
+          <!-- TOC (mobile) -->
+          <div class="docs-toc-mobile">
+            <label for="toc-mobile" class="t-muted" style="font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase">Jump to</label>
+            <select id="toc-mobile">
+              <option value="">— Choose a section —</option>
+              <option value="#getting-started">01 · Getting started</option>
+              <option value="#overlay">02 · The Iris overlay</option>
+              <option value="#threads">03 · Threads &amp; agents</option>
+              <option value="#palette">04 · Command palette</option>
+              <option value="#templates">05 · Workflow templates</option>
+              <option value="#snippets">06 · Prompt snippets</option>
+              <option value="#pins">07 · Pinning &amp; notifications</option>
+              <option value="#stats">08 · Stats dashboard</option>
+              <option value="#export">09 · Conversation export</option>
+              <option value="#shortcuts">10 · Keyboard shortcuts</option>
+              <option value="#keys">11 · API keys &amp; encryption</option>
+              <option value="#troubleshooting">12 · Troubleshooting</option>
+              <option value="#faq">13 · FAQ</option>
+            </select>
+          </div>
+
+          <!-- 1 Getting started -->
+          <h2 id="getting-started">Getting started</h2>
+          <p>
+            Iris Code is a desktop wrapper around the official <code>claude</code> CLI from Anthropic.
+            Before launching the app for the first time, install the CLI and authenticate it.
+          </p>
+
+          <h3>Install the Claude Code CLI</h3>
+          <p>From a terminal:</p>
+          <pre><code>npm install -g @anthropic-ai/claude-code
+claude auth login</code></pre>
+          <p>
+            <code>claude auth login</code> opens a browser and walks you through the OAuth flow.
+            When it completes, the CLI stores credentials in your OS keychain and is ready to use.
+          </p>
+
+          <h3>Install Iris Code</h3>
+          <p>
+            <a href="download.html">Download the installer</a> and run it. The default install path
+            is fine — no admin rights required. The installer creates a Start menu shortcut and a
+            desktop shortcut (you can opt out of the desktop shortcut).
+          </p>
+
+          <h3>First run &amp; the onboarding wizard</h3>
+          <p>On first launch, Iris Code runs a four‑step wizard:</p>
+          <ol>
+            <li><strong>CLI check</strong> — confirms the <code>claude</code> binary is on PATH and authenticated.</li>
+            <li><strong>Key vault setup</strong> — optionally store one or more Anthropic API keys in the OS keychain.</li>
+            <li><strong>Hotkey registration</strong> — claim a global hotkey for the Spotlight overlay.</li>
+            <li><strong>Shortcut tour</strong> — a 30‑second interactive tour of the command palette and snippets.</li>
+          </ol>
+          <p>Skip any step and revisit it from <strong>Settings · First run</strong> later.</p>
+
+          <!-- 2 Overlay -->
+          <h2 id="overlay">The Iris overlay</h2>
+          <p>
+            The Spotlight overlay is a translucent, always‑on‑top mini‑window you can summon from
+            anywhere with a global hotkey — default <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd>.
+            Use it as a launcher, a rubber duck, or a research assistant without leaving whatever
+            you were doing.
+          </p>
+
+          <h3>Summon &amp; dismiss</h3>
+          <ul>
+            <li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> — open the overlay (configurable).</li>
+            <li><kbd>Esc</kbd> — dismiss and restore previous focus.</li>
+            <li><kbd>Return</kbd> — send your prompt.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>Return</kbd> — send and open the response in the main app.</li>
+          </ul>
+
+          <h3>What to ask</h3>
+          <p>The overlay is optimized for quick, single‑turn questions:</p>
+          <ul>
+            <li>"Explain this error" (with a pasted stack trace).</li>
+            <li>"Quick regex for ISO‑8601 dates."</li>
+            <li>"Translate this curl command into TypeScript fetch."</li>
+            <li>"What does flag <code>--mmap</code> do for rsync?"</li>
+          </ul>
+          <p>For multi‑turn work, start a thread in the main window instead.</p>
+
+          <!-- 3 Threads -->
+          <h2 id="threads">Threads &amp; agents</h2>
+          <p>
+            A <strong>thread</strong> is a conversation. An <strong>agent</strong> is the
+            <code>claude</code> process that powers it. Each thread owns exactly one agent;
+            threads are independent.
+          </p>
+
+          <h3>Create a new thread</h3>
+          <p>Click <strong>+ New thread</strong> in the sidebar, press <kbd>Ctrl</kbd> + <kbd>N</kbd>, or pick <em>New thread</em> from the command palette.</p>
+          <p>You'll be asked:</p>
+          <ul>
+            <li><strong>Working directory</strong> — a folder on your machine, or "sandbox copy."</li>
+            <li><strong>Model</strong> — the Claude model the agent should use.</li>
+            <li><strong>API key</strong> — which named key from your vault.</li>
+            <li><strong>Template</strong> (optional) — a workflow template to seed the system prompt and starter actions.</li>
+          </ul>
+
+          <h3>Sandbox mode</h3>
+          <p>
+            With sandbox mode on, Iris Code copies your working directory into a scratch folder
+            under <code>%LOCALAPPDATA%\IrisCode\sandboxes\</code>. The agent works there. When
+            you're satisfied, choose <strong>Export changes</strong> from the thread menu to:
+          </p>
+          <ul>
+            <li>Apply changes back to your real working tree (with conflict detection).</li>
+            <li>Save changes as a <code>.patch</code> file.</li>
+            <li>Create a new branch on the real repo and push the changes there.</li>
+          </ul>
+
+          <h3>Per‑agent keys</h3>
+          <p>
+            Every thread can use a different API key from your vault. This matters when you want
+            to bill different clients separately, isolate experimental keys, or use a key with
+            different rate limits. See <a href="#keys">API keys &amp; encryption</a>.
+          </p>
+
+          <!-- 4 Palette -->
+          <h2 id="palette">Command palette</h2>
+          <p>
+            Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> (or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
+            on macOS once we ship that build) and a fuzzy search opens over every action in the app.
+          </p>
+          <p>The palette covers:</p>
+          <ul>
+            <li>Thread management — new, rename, pin, archive, export.</li>
+            <li>Navigation — jump between threads, open settings, open the stats dashboard.</li>
+            <li>Agent control — pause, resume, cancel, change model, change key.</li>
+            <li>App actions — toggle theme, reload, check for updates, open logs.</li>
+          </ul>
+          <p>Recently used actions float to the top automatically.</p>
+
+          <!-- 5 Templates -->
+          <h2 id="templates">Workflow templates</h2>
+          <p>
+            Templates are pre‑configured starting points. Pick one when creating a thread (or via the
+            palette: <em>Template: Code Review</em>) and the agent boots with a tuned system prompt
+            and a small list of starter actions you can fire with one click.
+          </p>
+
+          <h3>Built‑in templates</h3>
+          <table>
+            <thead>
+              <tr><th>Template</th><th>What it's for</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Code Review</td><td>Review a diff or branch for bugs, style, and clarity.</td></tr>
+              <tr><td>Refactor</td><td>Untangle a file or module, with a plan first.</td></tr>
+              <tr><td>Test Coverage</td><td>Identify gaps and write tests to fill them.</td></tr>
+              <tr><td>Documentation</td><td>Generate or update READMEs and inline docs.</td></tr>
+              <tr><td>Bug Hunt</td><td>Reproduce, isolate, and fix a reported issue.</td></tr>
+              <tr><td>Migration</td><td>Move between frameworks, runtimes, or major versions.</td></tr>
+            </tbody>
+          </table>
+          <p>Custom templates ship in v0.3.</p>
+
+          <!-- 6 Snippets -->
+          <h2 id="snippets">Prompt snippets</h2>
+          <p>
+            Snippets are saved prompts you can drop into any chat input. Open the chat input,
+            type <code>/</code>, and a fuzzy list appears. Type a few letters to narrow, hit
+            <kbd>Return</kbd> to insert.
+          </p>
+          <p>Manage snippets at <strong>Settings · Snippets</strong>. Each snippet has:</p>
+          <ul>
+            <li>A <strong>trigger</strong> — what you type after the slash. E.g. <code>review</code>.</li>
+            <li>A <strong>body</strong> — the actual prompt text. Supports placeholders like <code>{{selection}}</code>.</li>
+            <li>An optional <strong>description</strong> — shown in the dropdown.</li>
+          </ul>
+
+          <!-- 7 Pins & notifs -->
+          <h2 id="pins">Pinning &amp; notifications</h2>
+
+          <h3>Pinned threads</h3>
+          <p>
+            Right‑click any thread in the sidebar and choose <strong>Pin to top</strong> — or hit
+            <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>.</kbd> while a thread is focused. Pinned threads
+            get a small gold ring marker and sit above the regular list.
+          </p>
+
+          <h3>System notifications</h3>
+          <p>
+            Iris Code can raise native OS toasts when interesting things happen in the background.
+            Configure each event at <strong>Settings · Notifications</strong>:
+          </p>
+          <ul>
+            <li><strong>Agent finished</strong> — when a turn completes without errors.</li>
+            <li><strong>Agent needs input</strong> — when an agent asks a question and stalls.</li>
+            <li><strong>Agent errored</strong> — non‑recoverable failure (e.g. rate limit, network).</li>
+            <li><strong>Sandbox ready to export</strong> — when a sandboxed agent says "done."</li>
+          </ul>
+
+          <!-- 8 Stats -->
+          <h2 id="stats">Stats dashboard</h2>
+          <p>
+            Open the dashboard from <strong>View · Stats</strong> or with <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd>.
+            You'll see:
+          </p>
+          <ul>
+            <li>Total threads, messages, and tool invocations for any time range.</li>
+            <li>Per‑agent breakdowns of tokens consumed (input vs. output).</li>
+            <li>Most‑used templates and snippets.</li>
+            <li>Average turn duration, sorted by template.</li>
+          </ul>
+          <p>
+            <strong>All data is local.</strong> Iris Code does not phone home; the stats engine
+            reads from your local SQLite database and renders to the dashboard with no network call.
+          </p>
+
+          <!-- 9 Export -->
+          <h2 id="export">Conversation export</h2>
+          <p>
+            From any thread, choose <strong>Export → Markdown</strong> (or palette:
+            <em>Export thread as markdown</em>). The result is a single <code>.md</code> file with:
+          </p>
+          <ul>
+            <li>A <code>#</code> heading containing the thread title.</li>
+            <li><code>##</code> sub‑headings for each turn ("You" / "Iris").</li>
+            <li>Fenced code blocks for any code in the conversation.</li>
+            <li>Collapsible <code>&lt;details&gt;</code> blocks for tool calls (kept out of the way but available).</li>
+          </ul>
+          <p>JSON export — for archival or programmatic use — lands in v0.3.</p>
+
+          <!-- 10 Shortcuts -->
+          <h2 id="shortcuts">Keyboard shortcuts</h2>
+          <p>Iris Code is keyboard‑first. The shortcuts below are the defaults; remap any of them at <strong>Settings · Shortcuts</strong>.</p>
+          <table>
+            <thead>
+              <tr><th>Action</th><th>Shortcut</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Spotlight overlay</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (global)</td></tr>
+              <tr><td>Command palette</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td></tr>
+              <tr><td>New thread</td><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td></tr>
+              <tr><td>Close thread</td><td><kbd>Ctrl</kbd> + <kbd>W</kbd></td></tr>
+              <tr><td>Switch thread next / prev</td><td><kbd>Ctrl</kbd> + <kbd>Tab</kbd> / <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Tab</kbd></td></tr>
+              <tr><td>Jump to thread #1–9</td><td><kbd>Ctrl</kbd> + <kbd>1</kbd> … <kbd>Ctrl</kbd> + <kbd>9</kbd></td></tr>
+              <tr><td>Send message</td><td><kbd>Return</kbd></td></tr>
+              <tr><td>New line in message</td><td><kbd>Shift</kbd> + <kbd>Return</kbd></td></tr>
+              <tr><td>Cancel current turn</td><td><kbd>Esc</kbd></td></tr>
+              <tr><td>Pin / unpin thread</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>.</kbd></td></tr>
+              <tr><td>Open snippets</td><td>Type <code>/</code> in chat input</td></tr>
+              <tr><td>Stats dashboard</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd></td></tr>
+              <tr><td>Settings</td><td><kbd>Ctrl</kbd> + <kbd>,</kbd></td></tr>
+              <tr><td>Toggle sandbox mode</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></td></tr>
+              <tr><td>Reload app</td><td><kbd>Ctrl</kbd> + <kbd>R</kbd></td></tr>
+            </tbody>
+          </table>
+
+          <!-- 11 Keys -->
+          <h2 id="keys">API keys &amp; encryption</h2>
+          <p>
+            Iris Code stores API keys in your operating system's keychain — DPAPI on Windows,
+            Keychain on macOS (when that build ships), libsecret on Linux. Keys never touch the
+            filesystem in plaintext, and never appear in log output.
+          </p>
+
+          <h3>Managing keys</h3>
+          <p>Open <strong>Settings · Keys</strong>. You'll see a list of named keys; for each one you can:</p>
+          <ul>
+            <li><strong>Add</strong> — give it a friendly name and paste the key. It's encrypted immediately.</li>
+            <li><strong>Rotate</strong> — paste a new value; the old one is overwritten.</li>
+            <li><strong>Delete</strong> — removes the key from the vault and any threads using it fall back to your default.</li>
+            <li><strong>Set default</strong> — the key new threads use unless you pick another.</li>
+          </ul>
+
+          <h3>How encryption works</h3>
+          <p>
+            On Windows, keys are encrypted with the Data Protection API (DPAPI), scoped to your
+            user account. Only your logged‑in Windows profile can decrypt them. If you sign in as
+            another user (or copy the database to another machine), the keys are unreadable.
+          </p>
+
+          <!-- 12 Troubleshooting -->
+          <h2 id="troubleshooting">Troubleshooting</h2>
+
+          <h3>"claude CLI not found"</h3>
+          <p>
+            Iris Code looks for the <code>claude</code> binary on your <code>PATH</code> at launch.
+            If you installed it via <code>npm</code> after launching Iris Code, restart the app
+            (or open <strong>Settings · CLI</strong> and click <em>Re‑detect</em>).
+          </p>
+          <p>If detection still fails, set an explicit path in <strong>Settings · CLI · Custom path</strong>.</p>
+
+          <h3>Hotkey conflicts</h3>
+          <p>
+            <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> is uncommon, but some IMEs and
+            launchers claim it. If Iris Code fails to register the hotkey at launch, it shows a
+            small banner and offers an alternative (<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>I</kbd> by default).
+            Pick a new one at <strong>Settings · Shortcuts · Spotlight</strong>.
+          </p>
+
+          <h3>SmartScreen warning at install</h3>
+          <p>
+            The v0.4.0 installer is not yet code‑signed, so Microsoft Defender SmartScreen may
+            interrupt installation with a blue prompt. Click <strong>More info</strong>, then
+            <strong>Run anyway</strong>. Signed installers are scheduled for v0.5. For independent
+            verification before clicking through, run the installer past
+            <a href="download.html#cloud-scan">VirusTotal's free cloud scan</a> — 70+ antivirus
+            engines check the file in about 30 seconds.
+          </p>
+
+          <h3>Unsigned installer / antivirus quarantine</h3>
+          <p>
+            On rare antivirus configurations, the unsigned installer may be quarantined automatically.
+            Add an exception for <code>%LOCALAPPDATA%\IrisCode</code> or wait for the signed v0.5 build.
+            If your antivirus is flagging the file by hash, double‑check on
+            <a href="download.html#cloud-scan">VirusTotal</a> first — single‑engine heuristic alerts
+            on unsigned NSIS installers are common and almost always false positives.
+          </p>
+
+          <h3>App won't launch / blank window</h3>
+          <p>
+            Open <strong>%APPDATA%\IrisCode\logs\</strong> and grab the most recent log file —
+            either attach it to a GitHub issue or paste the last 200 lines into a chat with Iris
+            Spotlight. Most blank‑window cases are GPU driver related; try launching with
+            <code>--disable-gpu</code> as a workaround.
+          </p>
+
+          <h3>Where is my data stored?</h3>
+          <ul>
+            <li><strong>Threads &amp; messages</strong> — <code>%APPDATA%\IrisCode\db.sqlite</code></li>
+            <li><strong>Logs</strong> — <code>%APPDATA%\IrisCode\logs\</code></li>
+            <li><strong>Sandboxes</strong> — <code>%LOCALAPPDATA%\IrisCode\sandboxes\</code></li>
+            <li><strong>API keys</strong> — Windows DPAPI (not on disk in plaintext)</li>
+            <li><strong>Preferences</strong> — <code>%APPDATA%\IrisCode\settings.json</code></li>
+          </ul>
+
+          <!-- 13 FAQ -->
+          <h2 id="faq">FAQ</h2>
+
+          <details class="faq">
+            <summary>Does Iris Code send my code or prompts anywhere?</summary>
+            <div class="faq-body">
+              Not to us. Iris Code is a local app — prompts and tool calls go from your machine
+              directly to Anthropic's API via the <code>claude</code> CLI, using your API key.
+              We have no servers, no telemetry, no analytics. Source on GitHub.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Do I need an Anthropic API key?</summary>
+            <div class="faq-body">
+              Yes — Iris Code drives the <code>claude</code> CLI, which needs to be authenticated.
+              You can use the CLI's own login (via <code>claude auth login</code>) or paste a raw
+              API key into the encrypted vault. v0.3 will add Mode B for non‑Anthropic backends.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Can I run multiple agents at once?</summary>
+            <div class="faq-body">
+              Yes — that's the headline feature. Each thread is an independent <code>claude</code>
+              subprocess, so you can run as many as your machine can handle in parallel. Practical
+              limit is your token budget, not your CPU.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Why is it called Iris — and what does the name mean?</summary>
+            <div class="faq-body">
+              Two reasons that line up. Iris is the messenger goddess in Greek mythology —
+              the god of sub‑messaging — and that's exactly the job: dispatching messages
+              between you and N working agents, returning their results as a single coherent
+              conversation. <strong>IRIS</strong> is also an acronym for what the product is
+              underneath: <strong>I</strong>ntelligent <strong>R</strong>outing for
+              <strong>I</strong>ntegrated <strong>S</strong>ub‑agents.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Will there be a Mac or Linux build?</summary>
+            <div class="faq-body">
+              Yes — scheduled for v0.4. Signed DMG for macOS, AppImage and deb for Linux. The
+              Electron base is cross‑platform; what we still need is platform‑specific keychain,
+              hotkey, and notification glue, plus the signing pipeline.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Is Iris Code free?</summary>
+            <div class="faq-body">
+              Yes, MIT licensed and free forever. You pay Anthropic (or your chosen backend) for
+              the model calls; Iris Code itself is just a calm UI on top.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>Can I write my own workflow templates?</summary>
+            <div class="faq-body">
+              Not yet — v0.2 ships with six read‑only built‑in templates. The template editor
+              lands in v0.3 along with a single‑file JSON format you can share.
+            </div>
+          </details>
+
+          <details class="faq">
+            <summary>How do I report a bug or request a feature?</summary>
+            <div class="faq-body">
+              File an issue on the GitHub repo. For sensitive security reports, email
+              <a href="mailto:security@iriscode.app">security@iriscode.app</a> instead.
+            </div>
+          </details>
+
+          <hr />
+
+          <p class="t-muted" style="font-size: 0.88rem">
+            Last updated for v0.4.0 · May 2026 · Edit improvements welcome via PR.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="product.html#roadmap">Roadmap</a></li>
+            <li><a href="download.html#changelog">Release notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="docs.html#getting-started">Getting started</a></li>
+            <li><a href="docs.html#shortcuts">Shortcuts</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="docs.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+            <li><a href="mailto:hello@iris-code.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Iris Code · MIT License</span>
+        <span>The god of sub-messaging.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

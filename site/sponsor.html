@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sponsor Iris Code</title>
+  <meta name="description" content="Sponsor Iris Code — help keep an indie developer tool free, MIT-licensed, and ad-free." />
+  <link rel="icon" href="assets/iris-icon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <style>
+    .sponsor-hero { text-align: center; padding: var(--s-7) 0 var(--s-6); }
+    .sponsor-ring {
+      width: 96px; height: 96px; border-radius: 50%; margin: 0 auto var(--s-4);
+      background: radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent) 55%, transparent 70%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 12px 40px var(--accent-glow);
+      display: grid; place-items: center;
+    }
+    .sponsor-ring img { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+    .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+    @media (max-width: 900px) { .tier-grid { grid-template-columns: 1fr; } }
+    .tier-card {
+      border: 1px solid var(--border); border-radius: var(--radius-3);
+      padding: var(--s-5); background: var(--bg-1);
+      transition: transform 180ms var(--ease-out), border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
+      display: flex; flex-direction: column; gap: var(--s-3);
+    }
+    .tier-card:hover { transform: translateY(-2px); border-color: var(--accent-ring); box-shadow: var(--shadow-2); }
+    .tier-card.featured { border-color: var(--accent-ring); background: var(--accent-softer); }
+    .tier-eyebrow { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2); }
+    .tier-price { font-size: 1.8rem; font-weight: 600; color: var(--text-0); }
+    .tier-price .per { color: var(--text-2); font-size: 0.9rem; font-weight: 400; }
+    .tier-name { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-0); margin: 0; }
+    .tier-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--s-2); }
+    .tier-list li { color: var(--text-1); font-size: 0.92rem; padding-left: 22px; position: relative; }
+    .tier-list li::before {
+      content: "✓"; position: absolute; left: 0; top: 0;
+      color: var(--accent-2); font-weight: 600;
+    }
+    .one-time-grid { display: flex; gap: var(--s-3); flex-wrap: wrap; justify-content: center; }
+    .one-time-btn {
+      padding: var(--s-3) var(--s-4); border-radius: var(--radius-2);
+      border: 1px solid var(--border-strong); background: var(--bg-2);
+      font-family: inherit; color: var(--text-0); font-size: 0.92rem;
+      cursor: pointer; transition: all 180ms var(--ease-out);
+      text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .one-time-btn:hover { background: var(--accent-softer); border-color: var(--accent-ring); text-decoration: none; }
+    .why-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+    @media (max-width: 900px) { .why-list { grid-template-columns: 1fr; } }
+    .why-item h4 { font-family: var(--font-serif); font-size: 1.05rem; color: var(--accent-2); margin: 0 0 var(--s-2); }
+    .why-item p { color: var(--text-1); margin: 0; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+          <span>Iris <span class="wordmark">Code</span></span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+        <ul class="nav-links">
+          <li><a href="product.html">Features</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="safety.html">Safety</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="sponsor.html" class="active">Sponsor</a></li>
+          <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="sponsor-hero">
+      <div class="container">
+        <div class="sponsor-ring"><img src="assets/iris-icon.png" alt="" /></div>
+        <span class="section-eyebrow">Sponsor</span>
+        <h1>Sponsor Iris <span class="wordmark">Code</span>.</h1>
+        <p class="hero-sub">
+          Help keep an indie developer tool free, MIT‑licensed, and free of ads or
+          forced upsells. Sponsorship buys time — the kind of unhurried time that
+          makes a piece of software actually feel good.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TIERS
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="reveal" style="text-align: center; margin-bottom: var(--s-5)">
+          <span class="section-eyebrow">Recurring</span>
+          <h2>Monthly tiers.</h2>
+          <p style="color: var(--text-muted); max-width: 56ch; margin: var(--s-2) auto 0">
+            Sponsor on GitHub or Open Collective. Cancel any time. All tiers
+            include a thank-you in the next CHANGELOG and your name in the in-app
+            About modal (if you'd like).
+          </p>
+        </header>
+
+        <div class="tier-grid reveal">
+          <div class="tier-card">
+            <span class="tier-eyebrow">Tier 1</span>
+            <h3 class="tier-name">Supporter</h3>
+            <div class="tier-price">$5<span class="per"> / month</span></div>
+            <ul class="tier-list">
+              <li>Your name in the in-app About panel</li>
+              <li>Sponsor badge on your GitHub profile</li>
+              <li>Vote on the public roadmap</li>
+            </ul>
+            <a class="btn btn--primary" href="https://github.com/sponsors/iris-code" target="_blank" rel="noopener">Sponsor</a>
+          </div>
+
+          <div class="tier-card featured">
+            <span class="tier-eyebrow">Tier 2 · Most popular</span>
+            <h3 class="tier-name">Sustainer</h3>
+            <div class="tier-price">$25<span class="per"> / month</span></div>
+            <ul class="tier-list">
+              <li>Everything in Supporter</li>
+              <li>Early access to nightly builds</li>
+              <li>Private Discord channel with maintainers</li>
+              <li>Direct say in template &amp; snippet library</li>
+            </ul>
+            <a class="btn btn--primary" href="https://github.com/sponsors/iris-code" target="_blank" rel="noopener">Sponsor</a>
+          </div>
+
+          <div class="tier-card">
+            <span class="tier-eyebrow">Tier 3</span>
+            <h3 class="tier-name">Patron</h3>
+            <div class="tier-price">$100<span class="per"> / month</span></div>
+            <ul class="tier-list">
+              <li>Everything in Sustainer</li>
+              <li>Your logo on the README and site</li>
+              <li>Monthly 1:1 sync with the maintainer</li>
+              <li>Priority issue triage</li>
+            </ul>
+            <a class="btn btn--primary" href="https://github.com/sponsors/iris-code" target="_blank" rel="noopener">Sponsor</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ONE-TIME
+         ============================================================ -->
+    <section class="section section--tight">
+      <div class="container">
+        <header class="reveal" style="text-align: center; margin-bottom: var(--s-4)">
+          <span class="section-eyebrow">Or just say thanks</span>
+          <h2 style="font-size: 1.5rem;">One-time donation</h2>
+          <p style="color: var(--text-muted); margin: var(--s-2) auto 0; max-width: 50ch">
+            No commitment, no account — Ko-fi accepts cards, Apple Pay, and Google Pay.
+          </p>
+        </header>
+        <div class="one-time-grid reveal">
+          <a class="one-time-btn" href="https://ko-fi.com/irisocde" target="_blank" rel="noopener">☕ $5</a>
+          <a class="one-time-btn" href="https://ko-fi.com/irisocde" target="_blank" rel="noopener">🥐 $15</a>
+          <a class="one-time-btn" href="https://ko-fi.com/irisocde" target="_blank" rel="noopener">🍕 $25</a>
+          <a class="one-time-btn" href="https://ko-fi.com/irisocde" target="_blank" rel="noopener">🍷 $50</a>
+          <a class="one-time-btn" href="https://ko-fi.com/irisocde" target="_blank" rel="noopener">$ Custom →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHY
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-5)">
+          <span class="section-eyebrow">Why sponsor</span>
+          <h2>Three honest reasons.</h2>
+        </header>
+        <div class="why-list reveal">
+          <div class="why-item">
+            <h4>Indie tools need oxygen.</h4>
+            <p>
+              Iris Code is built by one person, after hours, without VC money. A
+              few dozen sponsors at any tier turns "a hobby" into "a project I
+              can keep showing up for."
+            </p>
+          </div>
+          <div class="why-item">
+            <h4>Stays free, stays MIT.</h4>
+            <p>
+              Sponsorship is the alternative to a paid tier or a closed-source
+              fork. The app you install today is the same one your grandchild's
+              grandchild can fork — sponsored development keeps it that way.
+            </p>
+          </div>
+          <div class="why-item">
+            <h4>You shape what ships.</h4>
+            <p>
+              Sustainer-tier sponsors and above get a vote on the next quarter's
+              roadmap. The features other developers actually want — your call.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FINAL CTA
+         ============================================================ -->
+    <section class="container">
+      <div class="cta-strip reveal">
+        <h2>Thank you.</h2>
+        <p>Every contribution — code, docs, sponsorship, or just a kind issue comment — keeps the project alive.</p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary btn--lg" href="https://github.com/sponsors/iris-code" target="_blank" rel="noopener">Sponsor on GitHub</a>
+          <a class="btn btn--ghost btn--lg" href="https://opencollective.com/iris-code" target="_blank" rel="noopener">Sponsor via Open Collective</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img class="brand-mark" src="assets/iris-icon.png" alt="" aria-hidden="true" />
+            <span>Iris <span class="wordmark">Code</span></span>
+          </a>
+          <p class="footer-blurb">The god of sub-messaging. A premium desktop GUI for Claude Code. MIT licensed.</p>
+        </div>
+        <div>
+          <h5>Product</h5>
+          <ul>
+            <li><a href="product.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="sponsor.html">Sponsor</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Community</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/issues" target="_blank" rel="noopener">Issues </a></li>
+            <li><a href="https://discord.gg/iris-code" target="_blank" rel="noopener">Discord</a></li>
+            <li><a href="https://github.com/sponsors/iris-code" target="_blank" rel="noopener">Sponsor</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener">Code of Conduct</a></li>
+            <li><a href="https://github.com/oorbitproductivity-oss/iris/blob/main/SECURITY.md" target="_blank" rel="noopener">Security</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-meta">Iris Code · v0.4.0 · MIT · © 2026 Iris Code</p>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+</body>
+</html>

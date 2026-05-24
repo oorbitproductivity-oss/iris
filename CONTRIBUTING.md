@@ -4,8 +4,8 @@ Thanks for caring about this project. Iris Code is a small indie tool — every 
 
 ## Quick links
 
-- Issues: <https://github.com/oorbitproductivity-oss/iriscode/issues>
-- Discussions: <https://github.com/oorbitproductivity-oss/iriscode/discussions>
+- Issues: <https://github.com/oorbitproductivity-oss/iris/issues>
+- Discussions: <https://github.com/oorbitproductivity-oss/iris/discussions>
 
 ## Ways to contribute
 
@@ -19,7 +19,7 @@ You don't need to write code to help.
 ## Local development setup
 
 ```bash
-git clone https://github.com/oorbitproductivity-oss/iriscode.git
+git clone https://github.com/oorbitproductivity-oss/iris.git
 cd iriscode
 npm install
 npm run dev          # Electron + DevTools + console forwarding

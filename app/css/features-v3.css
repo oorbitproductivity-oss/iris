@@ -1,0 +1,230 @@
+/* ═══════════════════════════════════════════════════════════
+   features-v3.css — v0.3 renderer feature styles
+   Four sections: tags, voice input, cost pill, welcome tour.
+   All colors via CSS variables — never hardcoded.
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ───────────────────────────────────────────────────────────
+   1. Tags — chips, dots, sidebar decoration, manager
+   ─────────────────────────────────────────────────────────── */
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-3);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  margin: 2px;
+}
+
+.tag-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px var(--border) inset;
+}
+
+.tag-chip .x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--text-md);
+  line-height: 1;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.tag-chip .x:hover {
+  background: var(--bg-3);
+  color: var(--text-0);
+}
+
+.tag-manager .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-3) 0;
+}
+
+.tag-manager .row .input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.tag-manager .hint {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}
+
+.sb-item .tags {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: var(--space-2);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sb-item .tags .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 1px var(--border) inset;
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   2. Voice button — ghost-styled, pulses while listening
+   ─────────────────────────────────────────────────────────── */
+
+.voice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid transparent;
+  margin-right: var(--space-2);
+  transition: color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+.voice-btn:hover:not(:disabled) {
+  color: var(--text-0);
+  background: var(--bg-3);
+}
+.voice-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.voice-btn.listening {
+  color: var(--accent-2);
+  background: var(--accent-soft);
+  border-color: var(--accent-ring-soft);
+  animation: voicePulse 1.4s var(--ease-in-out) infinite;
+}
+
+@keyframes voicePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--accent-ring-soft);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   3. Cost pill — monospace gold-tinted, sits in chat header
+   ─────────────────────────────────────────────────────────── */
+
+.cost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  margin-left: var(--space-2);
+  border-radius: var(--radius-2);
+  background: var(--accent-softer);
+  border: 1px solid var(--accent-ring-quiet);
+  color: var(--accent-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.cost-pill:empty {
+  display: none;
+}
+
+.cost-pill .sep {
+  color: var(--text-3);
+  padding: 0 1px;
+}
+
+
+/* ───────────────────────────────────────────────────────────
+   4. Tour — full-screen welcome modal for v0.3
+   ─────────────────────────────────────────────────────────── */
+
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+.tour-card {
+  width: min(460px, calc(100vw - 32px));
+  background: var(--bg-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-3);
+  box-shadow: var(--shadow-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: scaleIn 240ms var(--ease-out);
+}
+
+.tour-meta {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.tour-progress {
+  height: 2px;
+  background: var(--bg-3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tour-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width var(--dur) var(--ease-out);
+}
+
+.tour-title {
+  color: var(--text-0);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.tour-body {
+  color: var(--text-1);
+  font-size: var(--text-md);
+  line-height: 1.55;
+}
+
+.tour-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}

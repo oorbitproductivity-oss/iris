@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Iris — Icon Options</title>
+<style>
+  :root {
+    --bg: #0c0c10;
+    --panel: #15151b;
+    --border: rgba(255,255,255,0.08);
+    --text: #f4f4f5;
+    --text-dim: #8b8b96;
+    --gold: #c89b3c;
+    --gold-2: #e6b85c;
+  }
+  html, body { background: var(--bg); color: var(--text); margin: 0; padding: 0; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  body { padding: 40px 56px; min-height: 100vh; box-sizing: border-box; }
+  h1 { font-weight: 600; font-size: 28px; letter-spacing: -0.01em; margin: 0 0 6px; }
+  h1 .grad {
+    background: linear-gradient(120deg, var(--gold-2), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  p.sub { color: var(--text-dim); margin: 0 0 32px; line-height: 1.6; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 20px 18px;
+    text-align: center;
+    transition: border-color 180ms ease, transform 180ms ease;
+  }
+  .card:hover { border-color: rgba(200,155,60,0.35); transform: translateY(-2px); }
+  .num {
+    display: inline-block;
+    min-width: 22px;
+    height: 22px;
+    line-height: 22px;
+    border-radius: 11px;
+    background: rgba(200,155,60,0.14);
+    color: var(--gold-2);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 10px;
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+  .stage {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 18px;
+    padding: 20px 0 16px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(200,155,60,0.06), transparent 65%),
+      #0a0a0e;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .stage svg.big { width: 96px; height: 96px; }
+  .stage svg.med { width: 48px; height: 48px; }
+  .stage svg.sm  { width: 20px; height: 20px; }
+  .name { font-size: 14px; font-weight: 600; margin-top: 14px; }
+  .desc { font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+
+  .light-strip {
+    margin-top: 40px;
+    background: #f3f3ee;
+    border-radius: 16px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .light-strip svg { width: 44px; height: 44px; flex-shrink: 0; }
+  .light-strip .label { color: #6f5310; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- ───────── SYMBOL DEFINITIONS ───────── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- shared gradients reused by symbols -->
+    <radialGradient id="warmGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#e6b85c" stop-opacity="0.42"/>
+      <stop offset="70%" stop-color="#c89b3c" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#c89b3c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldVert" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3cc78"/>
+      <stop offset="55%" stop-color="#c89b3c"/>
+      <stop offset="100%" stop-color="#8a6a26"/>
+    </linearGradient>
+    <linearGradient id="goldVertSoft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3cc78"/>
+      <stop offset="100%" stop-color="#8a6a26"/>
+    </linearGradient>
+
+    <!-- ① Aperture -->
+    <symbol id="ico-aperture" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <g transform="translate(128 128)">
+        <g>
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <g transform="rotate(60)">
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <g transform="rotate(120)">
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <g transform="rotate(180)">
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <g transform="rotate(240)">
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <g transform="rotate(300)">
+          <path d="M0 -96 L72 30 L-72 30 Z" fill="url(#goldVert)" stroke="#5a4520" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+        <polygon points="0,-22 19,-11 19,11 0,22 -19,11 -19,-11" fill="#0a0a0e" stroke="#3a2c12" stroke-width="2"/>
+      </g>
+    </symbol>
+
+    <!-- ② Radiant Eye -->
+    <symbol id="ico-eye" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <circle cx="128" cy="128" r="76" fill="none" stroke="#c89b3c" stroke-width="3" opacity="0.55"/>
+      <circle cx="128" cy="128" r="58" fill="url(#goldVert)"/>
+      <circle cx="128" cy="128" r="20" fill="#0a0a0e"/>
+      <circle cx="120" cy="120" r="6" fill="#f3cc78" opacity="0.85"/>
+      <g stroke="#c89b3c" stroke-width="4" stroke-linecap="round">
+        <line x1="128" y1="20" x2="128" y2="38"/>
+        <line x1="128" y1="218" x2="128" y2="236"/>
+        <line x1="20" y1="128" x2="38" y2="128"/>
+        <line x1="218" y1="128" x2="236" y2="128"/>
+        <line x1="48" y1="48" x2="62" y2="62"/>
+        <line x1="194" y1="194" x2="208" y2="208"/>
+        <line x1="48" y1="208" x2="62" y2="194"/>
+        <line x1="194" y1="62" x2="208" y2="48"/>
+      </g>
+    </symbol>
+
+    <!-- ③ Iris Flower -->
+    <symbol id="ico-flower" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <!-- back petal (standard) -->
+      <path d="M128 24 C 96 50, 88 96, 110 130 L146 130 C 168 96, 160 50, 128 24 Z"
+            fill="url(#goldVertSoft)" opacity="0.85"/>
+      <!-- left fall -->
+      <path d="M40 132 C 50 184, 92 212, 122 196 C 132 168, 128 144, 116 134 C 96 124, 64 124, 40 132 Z"
+            fill="url(#goldVertSoft)"/>
+      <!-- right fall -->
+      <path d="M216 132 C 206 184, 164 212, 134 196 C 124 168, 128 144, 140 134 C 160 124, 192 124, 216 132 Z"
+            fill="url(#goldVertSoft)"/>
+      <!-- center -->
+      <path d="M128 118 L128 170" stroke="#f3cc78" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="128" cy="118" r="8" fill="#f3cc78"/>
+    </symbol>
+
+    <!-- ④ Rainbow Arc -->
+    <symbol id="ico-rainbow" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <path d="M40 188 A88 88 0 0 1 216 188" stroke="url(#goldVert)" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M62 188 A66 66 0 0 1 194 188" stroke="url(#goldVert)" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.72"/>
+      <path d="M84 188 A44 44 0 0 1 172 188" stroke="url(#goldVert)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <circle cx="128" cy="200" r="7" fill="#f3cc78"/>
+    </symbol>
+
+    <!-- ⑤ Sigil I -->
+    <symbol id="ico-sigil" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <circle cx="128" cy="128" r="98" fill="none" stroke="#c89b3c" stroke-width="3" opacity="0.45"/>
+      <g fill="url(#goldVertSoft)">
+        <rect x="80" y="64" width="96" height="14" rx="3"/>
+        <rect x="118" y="64" width="20" height="128"/>
+        <rect x="80" y="178" width="96" height="14" rx="3"/>
+      </g>
+      <circle cx="128" cy="128" r="5" fill="#0a0a0e"/>
+    </symbol>
+
+    <!-- ⑥ Halo -->
+    <symbol id="ico-halo" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="118" fill="url(#warmGlow)"/>
+      <circle cx="128" cy="128" r="84" fill="none" stroke="url(#goldVertSoft)" stroke-width="10"/>
+      <circle cx="128" cy="128" r="60" fill="none" stroke="#c89b3c" stroke-width="2" opacity="0.35"/>
+      <circle cx="128" cy="128" r="14" fill="url(#goldVertSoft)"/>
+      <g fill="#f3cc78">
+        <circle cx="128" cy="22"  r="6"/>
+        <circle cx="128" cy="234" r="6"/>
+        <circle cx="22"  cy="128" r="6"/>
+        <circle cx="234" cy="128" r="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+  <h1><span class="grad">Iris</span> — pick your icon</h1>
+  <p class="sub">Each icon is shown at 96px, 48px, and 20px so you can see how it holds up at every size. Tell Claude the number you want — e.g. <em>“go with 2”</em>.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <span class="num">① Aperture</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-aperture"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-aperture"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-aperture"/></svg>
+      </div>
+      <div class="name">Aperture</div>
+      <div class="desc">Six golden blades forming an iris diaphragm. Photographic, precise.</div>
+    </div>
+
+    <div class="card">
+      <span class="num">② Radiant Eye</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-eye"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-eye"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-eye"/></svg>
+      </div>
+      <div class="name">Radiant Eye</div>
+      <div class="desc">Golden iris with pupil and eight rays. Watchful, alert, witty.</div>
+    </div>
+
+    <div class="card">
+      <span class="num">③ Iris Flower</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-flower"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-flower"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-flower"/></svg>
+      </div>
+      <div class="name">Iris Flower</div>
+      <div class="desc">A stylized iris in bloom — botanical, soft, distinctive.</div>
+    </div>
+
+    <div class="card">
+      <span class="num">④ Rainbow Arc</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-rainbow"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-rainbow"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-rainbow"/></svg>
+      </div>
+      <div class="name">Rainbow Arc</div>
+      <div class="desc">Three nested arcs — homage to Iris, the goddess of the rainbow.</div>
+    </div>
+
+    <div class="card">
+      <span class="num">⑤ Sigil I</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-sigil"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-sigil"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-sigil"/></svg>
+      </div>
+      <div class="name">Sigil I</div>
+      <div class="desc">Slab-serif monogram inside a gold ring. Typographic, classic.</div>
+    </div>
+
+    <div class="card">
+      <span class="num">⑥ Halo</span>
+      <div class="stage">
+        <svg class="big" viewBox="0 0 256 256"><use href="#ico-halo"/></svg>
+        <svg class="med" viewBox="0 0 256 256"><use href="#ico-halo"/></svg>
+        <svg class="sm"  viewBox="0 0 256 256"><use href="#ico-halo"/></svg>
+      </div>
+      <div class="name">Halo</div>
+      <div class="desc">A gold ring with a center jewel and four cardinal pinpoints. Calm, regal.</div>
+    </div>
+
+  </div>
+
+  <div class="light-strip">
+    <span class="label">Light bg check</span>
+    <svg viewBox="0 0 256 256"><use href="#ico-aperture"/></svg>
+    <svg viewBox="0 0 256 256"><use href="#ico-eye"/></svg>
+    <svg viewBox="0 0 256 256"><use href="#ico-flower"/></svg>
+    <svg viewBox="0 0 256 256"><use href="#ico-rainbow"/></svg>
+    <svg viewBox="0 0 256 256"><use href="#ico-sigil"/></svg>
+    <svg viewBox="0 0 256 256"><use href="#ico-halo"/></svg>
+  </div>
+
+</body>
+</html>

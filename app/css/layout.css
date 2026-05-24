@@ -1,0 +1,706 @@
+/* ═══════════════════════════════════════════════════════════
+   Layout — Titlebar, Sidebar, Main pane
+   ═══════════════════════════════════════════════════════════ */
+
+#titlebar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--titlebar-h);
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  z-index: 50;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.tb-drag {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+}
+
+.tb-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  -webkit-app-region: no-drag;
+}
+
+.tb-brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-2);
+  background: radial-gradient(circle, rgba(200, 155, 60, 0.12) 0%, transparent 65%);
+  position: relative;
+}
+.tb-brand-mark::after {
+  /* Faint inner edge — feels like a chip with depth */
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--radius-2) - 1px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+.tb-brand-mark svg,
+.tb-brand-mark img { width: 18px; height: 18px; object-fit: contain; display: block; }
+
+.tb-brand-name {
+  font-size: var(--text-md);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+}
+
+.tb-controls {
+  display: flex;
+  align-items: stretch;
+  -webkit-app-region: no-drag;
+}
+
+/* Windows-shape window controls (min / max / close) with Apple-quality
+   craft: precise stroke weights, soft hover wash, micro-scale on press,
+   gentle 180ms cubic-bezier transitions, and a distinctive red on close
+   hover that animates in rather than snapping. */
+.tb-ctrl {
+  width: 44px;
+  height: var(--titlebar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  color: var(--text-2);
+  background: transparent;
+  transition:
+    background 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tb-ctrl svg {
+  display: block;
+  transition:
+    transform 220ms cubic-bezier(0.34, 1.32, 0.64, 1),
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tb-ctrl:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-0);
+}
+.tb-ctrl:active {
+  background: rgba(255, 255, 255, 0.10);
+}
+.tb-ctrl:active svg {
+  transform: scale(0.88);
+}
+.tb-ctrl:focus-visible {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-0);
+  box-shadow: inset 0 -2px 0 var(--accent-2);
+}
+
+/* Close button: same calm idle state, but the hover wash fades into a
+   crimson tone with white glyph — slow enough to feel intentional. */
+.tb-ctrl-close:hover {
+  background: #e0392b;
+  color: #fff;
+}
+.tb-ctrl-close:focus-visible {
+  background: #e0392b;
+  color: #fff;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* When the window loses focus, soften every glyph to a calmer shade —
+   matches the way Apple desktops dim background-window chrome. */
+#titlebar.blurred .tb-ctrl {
+  color: var(--text-3);
+}
+#titlebar.blurred .tb-ctrl svg {
+  opacity: 0.5;
+}
+
+/* ─── App grid (sidebar on the left, Codex-style) ─── */
+#app {
+  position: fixed;
+  top: var(--titlebar-h);
+  left: 0; right: 0; bottom: 0;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: 0;
+  overflow: hidden;
+}
+
+#sidebar {
+  background: var(--bg-1);
+  box-shadow: inset -1px 0 0 var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+#main {
+  background: var(--bg-0);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  position: relative;
+}
+
+#modal-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+#modal-root > * { pointer-events: auto; }
+
+/* ═══ Sidebar internals ═══ */
+
+.sb-iris-block {
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  position: relative;
+}
+.sb-iris-block::after {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+/* New "Open Iris" CTA — sits at the top of the sidebar, toggles the chat overlay */
+.sb-iris-cta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: linear-gradient(135deg, rgba(200,155,60,0.10), rgba(200,155,60,0.02) 70%), var(--bg-2);
+  border: 1px solid rgba(200, 155, 60, 0.24);
+  border-radius: var(--radius-2);
+  color: var(--text-0);
+  cursor: pointer;
+  text-align: left;
+  transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  box-shadow: 0 4px 14px -8px var(--accent-glow);
+}
+.sb-iris-cta:hover {
+  transform: translateY(-1px);
+  border-color: rgba(200, 155, 60, 0.45);
+  box-shadow: 0 8px 22px -8px var(--accent-glow);
+}
+.sb-iris-cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-ring-soft);
+}
+.sb-iris-hk {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  padding: 2px 5px;
+  border: 1px solid var(--border-strong);
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  color: var(--text-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 35%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sb-iris {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.sb-iris:hover {
+  background: var(--bg-2);
+  border-color: var(--border);
+}
+.sb-iris.active {
+  background: var(--accent-softer);
+  border-color: var(--accent-ring-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-ring-soft), 0 8px 24px -12px var(--accent-glow);
+}
+
+.sb-iris-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-2);
+  background: #0a0a0e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(200, 155, 60, 0.18),
+    0 6px 18px -6px var(--accent-glow);
+}
+.sb-iris-mark img,
+.sb-iris-mark svg { width: 26px; height: 26px; object-fit: contain; display: block; }
+
+.sb-iris-text { flex: 1; min-width: 0; }
+.sb-iris-name {
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--text-0);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sb-iris-sub {
+  font-size: var(--text-xs);
+  color: var(--text-2);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sb-iris.active .sb-iris-name {
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Section header */
+.sb-section { display: flex; flex-direction: column; }
+
+.sb-header {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sb-add-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-1);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+.sb-add-btn:hover { background: var(--bg-3); color: var(--text-0); }
+.sb-add-btn svg { width: 12px; height: 12px; }
+
+/* Worker list */
+.sb-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-1) var(--space-3) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-height: 0;
+}
+
+.sb-empty {
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+.sb-empty-cta {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  color: var(--text-1);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-empty-cta:hover {
+  background: var(--bg-3);
+  border-color: var(--border-strong);
+  color: var(--text-0);
+}
+
+.sb-item.appearing { animation: fadeUpSmall 200ms var(--ease-out) both; }
+.sb-item {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.sb-item:hover { background: var(--bg-3); }
+.sb-item.active {
+  background: var(--bg-2);
+}
+.sb-item.active::before {
+  /* Left edge highlight — Codex's selected-row trick */
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.sb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gray-dot);
+  flex-shrink: 0;
+  position: relative;
+}
+.sb-dot.running {
+  background: var(--green);
+  box-shadow: 0 0 0 3px var(--green-soft);
+  animation: irisPulse 1.4s ease-in-out infinite;
+}
+.sb-dot.error { background: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+
+.sb-item-body { flex: 1; min-width: 0; }
+.sb-item-name {
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--text-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.005em;
+}
+.sb-item-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-2);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sb-item-cwd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.sb-item-time::before {
+  content: '·';
+  margin-right: var(--space-2);
+  color: var(--text-4);
+}
+
+.sb-item-menu {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-1);
+  color: var(--text-3);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-item:hover .sb-item-menu,
+.sb-item:focus-within .sb-item-menu { opacity: 1; }
+.sb-item-menu:hover { background: var(--bg-4); color: var(--text-0); }
+
+/* Footer */
+.sb-footer {
+  padding: var(--space-3);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sb-footer::before {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  top: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.sb-foot-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-2);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-foot-btn:hover { background: var(--bg-3); color: var(--text-0); }
+.sb-foot-btn svg { width: 14px; height: 14px; }
+
+/* Compact icon-only variant for the Telegram quick-toggle, so a third
+   button in the footer doesn't push New Window / Settings off-screen. */
+.sb-foot-btn.sb-foot-icon-only {
+  flex: 0 0 auto;
+  padding: var(--space-2);
+  position: relative;
+  justify-content: center;
+}
+
+/* Telegram quick-toggle status dot, anchored to the icon corner. */
+.sb-foot-tg-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #555;
+  box-shadow: 0 0 0 2px var(--bg-2, #1a1a1a);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.sb-foot-tg-dot.ok { background: #5fce6c; }
+.sb-foot-tg-dot.warn { background: #e0a040; }
+.sb-foot-tg-dot.off { background: #555; }
+
+/* Context menu */
+.ctx-menu {
+  position: fixed;
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-2);
+  padding: var(--space-1);
+  min-width: 168px;
+  box-shadow: var(--shadow-3);
+  z-index: 200;
+  animation: scaleIn 140ms var(--ease-out) both;
+  transform-origin: top left;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.ctx-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px var(--space-3);
+  border-radius: var(--radius-1);
+  color: var(--text-1);
+  font-size: var(--text-base);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.ctx-item:hover { background: var(--bg-3); color: var(--text-0); }
+.ctx-item.danger { color: var(--red); }
+.ctx-item.danger:hover { background: var(--red-soft); color: var(--red); }
+.ctx-item svg { width: 14px; height: 14px; opacity: 0.8; }
+.ctx-sep { height: 1px; background: var(--border); margin: var(--space-1) 2px; }
+
+/* ─── Sidebar: group-mode toggle (folder vs recent) ─── */
+.sb-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: 2px;
+  margin-left: auto;
+  margin-right: var(--space-2);
+}
+.sb-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 18px;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-mode-btn:hover { color: var(--text-1); }
+.sb-mode-btn.active {
+  background: var(--bg-3);
+  color: var(--accent);
+}
+
+/* ─── Sidebar: split "+ New" button with advanced chevron ─── */
+.sb-add-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 1px;
+  border-radius: var(--radius-1);
+  overflow: hidden;
+}
+.sb-add-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  padding: 0 6px;
+  cursor: pointer;
+  border-radius: var(--radius-1);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-add-more:hover { background: var(--bg-3); color: var(--text-0); }
+.sb-add-more svg { width: 10px; height: 10px; }
+
+/* ─── Sidebar: folder groups ─── */
+.sb-active-host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.sb-group {
+  display: flex;
+  flex-direction: column;
+}
+.sb-group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3) 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+.sb-group-header svg { width: 11px; height: 11px; opacity: 0.85; }
+.sb-group-name {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11.5px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.sb-group-count {
+  margin-left: auto;
+  font-size: 10px;
+  background: var(--bg-3);
+  color: var(--text-3);
+  padding: 1px 6px;
+  border-radius: 999px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.sb-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Sandbox group — visually signals isolation. The shield icon picks up
+   the accent tint, the label brightens, and a small "isolated" tag sits
+   between the name and the count so the user immediately reads the
+   property without having to remember which threads were sandboxed. */
+.sb-group-sandbox .sb-group-header svg {
+  color: var(--accent-2);
+  opacity: 1;
+}
+.sb-group-sandbox .sb-group-name {
+  color: var(--text-1);
+}
+.sb-group-tag {
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  background: var(--accent-soft);
+  border: 1px solid rgba(200, 155, 60, 0.35);
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ─── Sidebar: archived (collapsed) section ─── */
+.sb-archive {
+  margin-top: var(--space-4);
+  border-top: 1px dashed var(--border);
+  padding-top: var(--space-2);
+}
+.sb-archive-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border-radius: var(--radius-1);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.sb-archive-header:hover { background: var(--bg-2); color: var(--text-2); }
+.sb-archive-header svg {
+  width: 11px; height: 11px;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.sb-archive-header.open svg { transform: rotate(90deg); }
+.sb-archive-label { letter-spacing: 0.12em; }
+.sb-archive-count {
+  margin-left: auto;
+  font-size: 10px;
+  background: var(--bg-3);
+  color: var(--text-3);
+  padding: 1px 6px;
+  border-radius: 999px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.sb-archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  opacity: 0.78;
+}
+.sb-archive-list .sb-item:hover { opacity: 1; }

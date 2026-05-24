@@ -1,0 +1,65 @@
+name: Bug report
+description: Something broke or behaved unexpectedly.
+title: "[bug] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill in as much detail as you can — terse reports take much longer to fix.
+  - type: input
+    id: version
+    attributes:
+      label: Iris Code version
+      description: From the About modal, or `package.json` if running from source.
+      placeholder: "0.3.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows 11 (x64)
+        - Windows 11 (ARM64)
+        - Windows 10
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: claude_version
+    attributes:
+      label: claude CLI version
+      description: Output of `claude --version`.
+      placeholder: "0.2.50"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What did you do? Numbered list works best.
+      placeholder: |
+        1. Open Iris Code.
+        2. Click "+ New" in the sidebar.
+        3. Pick folder "C:\projects\foo".
+        4. Send "hello".
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: "I expected the agent to reply with..."
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: "Instead, the app..."
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and screenshots
+      description: Anything from DevTools (Ctrl+Shift+I in dev mode), terminal output, or screen recordings.
+      render: text

@@ -1,0 +1,23 @@
+# Cloudflare Pages _headers — security + caching
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Long-cache static assets (icon, CSS, JS) — content-hash if you start versioning them
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/*
+  Cache-Control: public, max-age=86400
+
+/js/*
+  Cache-Control: public, max-age=86400
+
+# Auto-update manifest — short cache so version bumps reach clients quickly
+/latest.json
+  Cache-Control: public, max-age=300
+  Content-Type: application/json

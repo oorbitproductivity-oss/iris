@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output — large binaries published as GitHub release assets instead
+dist/
+build/output/
+*.exe
+*.exe.blockmap
+*.dmg
+*.AppImage
+*.deb
+*.snap
+win-unpacked/
+win-arm64-unpacked/
+mac/
+linux-unpacked/
+
+# Runtime state (lives in %APPDATA%/IrisCode at runtime, never in repo)
+*.sqlite
+*.sqlite-journal
+*.log
+logs/
+
+# Local secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+telegram-token.json
+settings.local.json
+
+# Tooling caches
+.wrangler/
+.parcel-cache/
+.cache/
+.eslintcache
+coverage/
+.nyc_output/
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Agent / personal workspace
+.claude/
+
+# Build scratch
+*.tsbuildinfo

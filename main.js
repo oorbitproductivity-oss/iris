@@ -24,6 +24,9 @@ const { AgentManager } = require("./lib/agent-manager.js");
 const remoteServer = require("./lib/server.js");
 const memoryHelper = require("./lib/claude-md-memory.js");
 const { TelegramService } = require("./lib/telegram/index.js");
+const { Registry: McpRegistry } = require("./lib/mcp/registry.js");
+const { Installer: McpInstaller } = require("./lib/mcp/installer.js");
+const { PtyManager } = require("./lib/terminal/pty-manager.js");
 
 app.setName("Iris Code");
 nativeTheme.themeSource = "dark";
@@ -32,6 +35,13 @@ const DATA_DIR = path.join(app.getPath("userData"), "iris-data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const store = new Store(DATA_DIR);
+const mcpRegistry = new McpRegistry(DATA_DIR);
+const mcpInstaller = new McpInstaller({ dataDir: DATA_DIR, registry: mcpRegistry, store });
+// v0.5 Feature 3 — integrated terminal pane. PtyManager wraps node-pty
+// behind a graceful-degradation shim so the app still boots on machines
+// where the native binding isn't built yet (PtyManager.isAvailable() ->
+// false; the renderer's pill self-disables with a clear inline message).
+const pty = new PtyManager({ dataDir: DATA_DIR, broadcast });
 let manager = null;
 /** @type {TelegramService|null} */
 let telegram = null;
@@ -176,23 +186,75 @@ function activeWindow() {
   return windows.values().next().value || null;
 }
 
+// ── Native translucent window chrome (Win11 Mica / macOS vibrancy) ──
+//
+// Win11 build 22000+ ships the Mica material; macOS supports vibrancy on
+// every modern release. Win10 and Linux get nothing — the CSS variant is
+// gated off so users on those OSes never see a degraded "almost-translucent"
+// look. Computed once at module load; cheap to call.
+function getTranslucentSupport() {
+  if (process.platform === "win32") {
+    // Windows release strings look like "10.0.22000". Mica requires the
+    // build number (third segment) to be 22000 or higher.
+    const parts = (os.release() || "").split(".");
+    const build = parseInt(parts[2] || "0", 10);
+    if (build >= 22000) return { supported: true, reason: null };
+    return { supported: false, reason: "Windows 10 — Mica requires Windows 11 (build 22000+)" };
+  }
+  if (process.platform === "darwin") {
+    return { supported: true, reason: null };
+  }
+  return { supported: false, reason: "Available on Windows 11 (build 22000+) and macOS only." };
+}
+
 function createMainWindow() {
-  const w = new BrowserWindow({
+  const settings = store.getSettings();
+  const translucent = !!settings.translucentWindow;
+  const support = getTranslucentSupport();
+  const applyTranslucent = translucent && support.supported;
+
+  const opts = {
     width: 1280,
     height: 840,
     minWidth: 900,
     minHeight: 600,
     frame: false,
     titleBarStyle: "hidden",
-    backgroundColor: "#0b0b0f",
+    // When Mica/vibrancy is on, the backgroundColor must be transparent or
+    // the opaque fill draws OVER the system material. Use a fully-transparent
+    // color in that case; otherwise keep the dark fill so the window paints
+    // a known color the instant it appears (no first-paint flash).
+    backgroundColor: applyTranslucent ? "#00000000" : "#0b0b0f",
     show: false,
     icon: path.join(__dirname, "app", "assets", "iris-icon-square.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
+      // v0.5: enable the <webview> tag so the per-agent embedded browser
+      // pane (app/js/ui/browser-pane.js) can mount. The pane uses
+      // partition="persist:agent-<id>" so cookies never bleed across threads.
+      webviewTag: true,
     },
-  });
+  };
+
+  if (applyTranslucent) {
+    if (process.platform === "win32") {
+      // "mica" is the standard Win11 translucent material; transparent is the
+      // host-window prerequisite. Electron silently ignores backgroundMaterial
+      // when the OS doesn't support it, but we've already gated above.
+      opts.backgroundMaterial = "mica";
+      opts.transparent = true;
+    } else if (process.platform === "darwin") {
+      // "under-window" gives the classic Big Sur vibrancy behind app chrome.
+      // visualEffectState: "active" keeps the material lively even when the
+      // window loses focus (otherwise macOS dims it to a near-opaque gray).
+      opts.vibrancy = "under-window";
+      opts.visualEffectState = "active";
+    }
+  }
+
+  const w = new BrowserWindow(opts);
   windows.add(w);
 
   w.loadFile(path.join(__dirname, "app", "index.html"));
@@ -611,6 +673,29 @@ function registerScreenshotHotkey() {
 
 ipcMain.handle("screenshot:capture", () => captureScreenshotAndPrompt());
 
+// Save an arbitrary PNG data URL to disk (under SCREENSHOT_DIR) and return
+// the resulting absolute file path. Powers the v0.5 browser pane's "send
+// screenshot to agent" flow, which captures via webview.capturePage() in
+// the renderer and needs a real file path so the agent's Read tool can
+// pick it up. Validates the URL is `data:image/png;base64,…` and caps the
+// payload at 8 MB so a runaway capture cannot fill the disk.
+ipcMain.handle("screenshot:save-data-url", async (_e, dataUrl) => {
+  try {
+    if (typeof dataUrl !== "string") return { ok: false, error: "invalid input" };
+    const m = /^data:image\/png;base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl);
+    if (!m) return { ok: false, error: "must be data:image/png;base64,…" };
+    const b64 = m[1];
+    if (b64.length > 8 * 1024 * 1024 * 4 / 3) return { ok: false, error: "image too large (>8MB)" };
+    const buf = Buffer.from(b64, "base64");
+    const filename = `iris-pane-${Date.now()}.png`;
+    const filepath = path.join(SCREENSHOT_DIR, filename);
+    await fs.promises.writeFile(filepath, buf);
+    return { ok: true, filepath };
+  } catch (err) {
+    return { ok: false, error: String(err && err.message || err) };
+  }
+});
+
 // ── Remote access (mobile companion) ──
 // The token, enable flag, port, and host live in store settings under
 // `remoteAccess`. A token is generated lazily the first time the user
@@ -709,8 +794,11 @@ function getRemoteStatus() {
 }
 
 app.whenReady().then(() => {
-  manager = new AgentManager({ store, dataDir: DATA_DIR, broadcast });
+  manager = new AgentManager({ store, dataDir: DATA_DIR, broadcast, mcpInstaller });
   manager.bootstrap();
+  // Best-effort: warm the catalog cache in the background. Failures are
+  // logged inside the registry and never block startup.
+  mcpRegistry.refresh().catch(() => {});
 
   // Telegram bridge. Construct unconditionally so IPC works even when the
   // user hasn't enabled it yet; start() is a no-op without a token + flag.
@@ -813,7 +901,13 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-app.on("before-quit", () => { isQuitting = true; });
+app.on("before-quit", () => {
+  isQuitting = true;
+  // Kill every live PTY so we don't orphan a shell subprocess at app quit.
+  try { pty.shutdown(); } catch (err) {
+    console.warn("[main] pty.shutdown failed:", err);
+  }
+});
 
 app.on("will-quit", () => {
   if (registeredHotkey) {
@@ -837,8 +931,26 @@ ipcMain.handle("settings:set", (_e, patch) => {
   if (touchedHotkey) {
     validateAndRegisterAllHotkeys({ notify: true });
   }
+  // Translucent toggle: notify every open renderer so the CSS variant can
+  // re-apply mid-session without a restart. The native material only
+  // attaches at window creation time on Windows (BrowserWindow lacks a
+  // runtime setter), so flipping this setting takes full effect on next
+  // window open — we still update the CSS variant immediately so existing
+  // surfaces match the new state until then.
+  if (patch && Object.prototype.hasOwnProperty.call(patch, "translucentWindow")) {
+    const next = !!merged.translucentWindow;
+    for (const w of windows) {
+      if (!w.isDestroyed()) {
+        try { w.webContents.send("ui:translucent-changed", { enabled: next }); } catch {}
+      }
+    }
+  }
   return merged;
 });
+
+// Renderer asks "is the translucent window option available on this OS?".
+// Cheap to call; the answer depends only on process.platform + os.release().
+ipcMain.handle("translucent:support", () => getTranslucentSupport());
 
 // ── IPC: Folder / file pickers ──
 ipcMain.handle("folder:pick", async (e) => {
@@ -1223,6 +1335,47 @@ ipcMain.handle("telegram:set-chat-mode", async (_e, mode) => {
   try { return { ok: true, status: telegram.setChatMode(mode) }; }
   catch (err) { return { ok: false, error: String(err.message || err) }; }
 });
+
+// ── IPC: MCP marketplace ──
+ipcMain.handle("mcp:catalog", async (_e, { refresh = false } = {}) => {
+  if (refresh) {
+    await mcpRegistry.refresh({ force: true });
+  }
+  return mcpRegistry.getCatalog();
+});
+ipcMain.handle("mcp:installs", () => mcpInstaller.list());
+ipcMain.handle("mcp:install", (_e, opts) => {
+  try {
+    const rec = mcpInstaller.install(opts || {});
+    return { ok: true, install: rec };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err) };
+  }
+});
+ipcMain.handle("mcp:uninstall", (_e, id) => {
+  try {
+    return { ok: mcpInstaller.uninstall(id) };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err) };
+  }
+});
+
+// ── IPC: Terminal ──
+// Thin wrappers over PtyManager. All methods are safe to call even when
+// node-pty failed to load (the manager will return {ok:false} or false).
+ipcMain.handle("terminal:available", () => pty.isAvailable());
+ipcMain.handle("terminal:create", (_e, opts) => pty.create(opts || {}));
+ipcMain.handle("terminal:list", (_e, opts) => pty.list(opts || {}));
+ipcMain.handle("terminal:history", (_e, { terminalId, lines } = {}) =>
+  pty.getHistory(terminalId, lines)
+);
+ipcMain.on("terminal:write", (_e, { terminalId, data } = {}) =>
+  pty.write(terminalId, data)
+);
+ipcMain.on("terminal:resize", (_e, { terminalId, cols, rows } = {}) =>
+  pty.resize(terminalId, cols, rows)
+);
+ipcMain.on("terminal:kill", (_e, terminalId) => pty.kill(terminalId));
 
 // ── IPC: Misc ──
 ipcMain.handle("app:dataDir", () => DATA_DIR);

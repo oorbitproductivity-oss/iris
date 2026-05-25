@@ -80,3 +80,25 @@ After deploy:
 Once the URL is confirmed working, paste it into Gmail / iMessage / Discord
 yourself — or use the `/share.html` page on the site to open a prefilled
 share sheet.
+
+## 7. Local dev setup (contributors)
+
+`npm install` does everything you need — it pulls dependencies AND runs
+the `postinstall` script which:
+
+1. Copies the xterm.js renderer files into `app/js/lib/xterm/` so the
+   integrated terminal pane (v0.5 Feature 3) can load them without a
+   bundler.
+2. Runs `electron-rebuild -f -w node-pty` so node-pty's native binding
+   matches Electron's Node ABI.
+
+Then start the app with `npm start`.
+
+### Troubleshooting
+
+- **`Cannot find module ... pty.node`** — node-pty wasn't rebuilt
+  against this Electron. Run `npx electron-rebuild -f -w node-pty`
+  manually and restart.
+- **Terminal pane says "feature unavailable — run npm install"** — the
+  xterm vendor files weren't copied. Run `node tools/copy-xterm.js`
+  manually.

@@ -16,6 +16,12 @@ const suites = [
   'cli.test.js',
   'remote.test.js',
   'telegram.test.js',
+  'mcp.test.js',
+  'terminal.test.js',
+  'markdown.test.js',
+  // v0.5.1 features
+  'slash-commands.test.js',
+  'cost-tracker.test.js',
 ];
 
 let failed = 0;

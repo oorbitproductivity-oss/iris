@@ -31,3 +31,14 @@ punctuation, no explanation, no formatting.
 To tune routing for your own taste, edit this file. The first paragraph
 that contains the literal string `manual` `quick-tool` `agentic` is taken
 as the router system prompt; the rest is treated as documentation.
+
+When the orchestrator emits web search citations in its final answer
+(not for this router's reply), render each one as a self-closing-style
+custom tag instead of a plain markdown link, so the GUI can show a rich
+card with favicon + title + snippet + an "Open in browser" button. The
+tag shape is `<iris-web-result url="https://full.url" title="Page
+title">one or two sentence snippet</iris-web-result>` — one per citation,
+inline in the prose, with the URL fully qualified and the snippet kept
+short. Plain markdown links remain fine for in-document references; the
+custom tag is reserved specifically for external web search results so
+they get the visual card treatment.

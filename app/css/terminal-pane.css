@@ -1,0 +1,202 @@
+/* ═══════════════════════════════════════════════════════════
+   terminal-pane.css — v0.5 Feature 3: integrated terminal pane
+   ═══════════════════════════════════════════════════════════
+   The pane mounts INSIDE .chat-view, between .chat-scroll and
+   .composer-wrap. .chat-view is already a flex column, so the
+   pane just claims a fixed height beneath the scroll log.
+   ═══════════════════════════════════════════════════════════ */
+
+.terminal-pane-host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 280px;
+  flex: 0 0 280px;
+  background: #0b0d12;
+  color: var(--text-0);
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+.terminal-pane-host[hidden] { display: none !important; }
+
+/* ── Horizontal drag handle on TOP of the pane ───────────── */
+.terminal-pane-splitter {
+  flex: 0 0 6px;
+  height: 6px;
+  width: 100%;
+  cursor: row-resize;
+  background: transparent;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+  position: relative;
+  z-index: 1;
+}
+.terminal-pane-splitter:hover,
+.terminal-pane-splitter.dragging {
+  background: var(--accent-soft);
+  border-top-color: var(--accent-ring-soft);
+  border-bottom-color: var(--accent-ring-soft);
+}
+.terminal-pane-splitter[hidden] { display: none !important; }
+
+/* ── Header (title + actions) ────────────────────────────── */
+.tp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+  flex: 0 0 auto;
+}
+
+.tp-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+}
+.tp-title-label {
+  font-weight: 600;
+  color: var(--text-0);
+}
+.tp-title-sep {
+  opacity: 0.5;
+}
+.tp-title-cwd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 50vw;
+  color: var(--text-2);
+}
+
+.tp-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+
+.tp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 28px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-2);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.tp-btn:hover:not(:disabled) {
+  background: var(--bg-3);
+  border-color: var(--border);
+  color: var(--text-0);
+}
+.tp-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.tp-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+.tp-btn.tp-btn-primary {
+  background: var(--accent-soft);
+  border-color: var(--accent-ring-soft);
+  color: var(--accent-2);
+}
+.tp-btn.tp-btn-primary:hover:not(:disabled) {
+  background: var(--accent-softer);
+  border-color: var(--accent-ring);
+}
+
+/* ── xterm host ──────────────────────────────────────────── */
+.tp-xterm-slot {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: block;
+  position: relative;
+  background: #0b0d12;
+  overflow: hidden;
+}
+.tp-xterm {
+  width: 100%;
+  height: 100%;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+.tp-xterm .xterm,
+.tp-xterm .xterm-viewport,
+.tp-xterm .xterm-screen {
+  width: 100% !important;
+  height: 100% !important;
+  background: #0b0d12 !important;
+}
+
+/* ── "Feature unavailable" notice ────────────────────────── */
+.tp-unavailable {
+  margin: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-2);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.tp-unavailable[hidden] { display: none !important; }
+
+/* ── "Terminal" pill in chat header ──────────────────────── */
+.pill.terminal-pill {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.pill.terminal-pill:hover {
+  background: var(--bg-3);
+  color: var(--text-0);
+  border-color: var(--border-strong);
+}
+.pill.terminal-pill.on {
+  background: var(--accent-soft);
+  border-color: var(--accent-ring-soft);
+  color: var(--accent-2);
+}
+.pill.terminal-pill.on:hover {
+  background: var(--accent-softer);
+  border-color: var(--accent-ring);
+}
+.pill.terminal-pill.disabled {
+  opacity: 0.55;
+}
+.pill.terminal-pill .terminal-pill-icon {
+  display: inline-flex;
+  align-items: center;
+}
+.pill.terminal-pill[hidden] { display: none !important; }
+
+/* ── Light-theme refinements ─────────────────────────────── */
+[data-theme="light"] .terminal-pane-host {
+  background: #14171c;
+}
+[data-theme="light"] .tp-header {
+  background: var(--bg-2);
+}

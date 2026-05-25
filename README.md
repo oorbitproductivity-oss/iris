@@ -7,6 +7,8 @@
 
 Open source · [Docs](https://iris-code.pages.dev/docs.html)
 
+**v0.5.0** — three Codex-parity features land in one release: a one-click **MCP server marketplace** (Playwright, GitHub, Postgres, Fetch, Filesystem, Memory, Sequential-Thinking, Time) with encrypted secret vault, a per-agent **embedded browser pane** with isolated cookies + screenshot-to-agent, and a real **integrated terminal** (xterm + node-pty) with a "share last 50 lines" hand-off. See [`docs/mcp-marketplace.md`](docs/mcp-marketplace.md), [`docs/browser-pane.md`](docs/browser-pane.md), [`docs/terminal.md`](docs/terminal.md).
+
 **v0.4.0** — adds the **Telegram Remote Agent** bridge: DM your personal bot, every message becomes a Claude Code task on your desktop, results stream back as bot replies. Bring-your-own-bot, encrypted at rest, no shared infrastructure. See [`docs/telegram.md`](docs/telegram.md) for setup.
 
 **v0.3.0** — ten new features land on top of v0.2's seven, and the project is now open source under MIT with full contributor docs. See `site/index.html` for the product page, `site/download.html` for installation, and `site/sponsor.html` to support the project.
@@ -51,9 +53,16 @@ Iris Code wraps the Claude Code CLI in a desktop app that gives you two ways to 
 | **Auto-update check** — non-blocking banner when a new version ships | ✅ v0.3 |
 | **Interactive welcome tour** — 5-step orientation for new and upgrading users | ✅ v0.3 |
 | **Telegram Remote Agent** — DM your personal bot to run Claude Code tasks on your desktop; bring-your-own-bot, encrypted token, 6-digit pairing | ✅ v0.4 |
-| Mode B "Use a non-Anthropic API" (ACP / LiteLLM) | 📋 v0.3 |
-| Live browser pane (Playwright MCP) | 📋 v0.3 |
-| Diff viewer for file edits | 📋 v0.3 |
+| **MCP server marketplace** — one-click install of curated MCP servers (Playwright, GitHub, Postgres, Fetch, Filesystem, Memory, Sequential-Thinking, Time); encrypted secret vault; per-agent `.mcp.json` shred-on-close | ✅ v0.5 |
+| **Embedded browser pane** — per-agent webview with isolated cookies, URL bar, screenshot-to-agent, draggable splitter | ✅ v0.5 |
+| **Integrated terminal pane** — real PTY per agent (xterm + node-pty), 10k-line ring buffer, "share last 50 lines with agent" hand-off | ✅ v0.5 |
+| **Custom slash commands** — define your own `/standup`, `/fix-pr`, etc. with `{{selection}}` + `{{cursor}}` templating; JSON export / import | ✅ v0.5 |
+| **Per-thread cost budgets** — dollar ceiling per agent; 80% warn toast, 100% modal with Raise / Continue once / Stop; pill progress bar | ✅ v0.5 |
+| **Rich web-result cards** — orchestrator citations render as favicon + title + snippet visual cards instead of plain blue links | ✅ v0.5 |
+| **Native translucent window chrome** — Mica on Windows 11, under-window vibrancy on macOS, on dark themes only | ✅ v0.5 |
+| Mode B "Use a non-Anthropic API" (ACP / LiteLLM) | 📋 v0.6 |
+| Live browser pane (Playwright MCP) | ✅ via MCP marketplace in v0.5 |
+| Diff viewer for file edits | ✅ v0.3 |
 
 ## Contributing & support
 

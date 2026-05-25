@@ -42,6 +42,10 @@ const THEMES = [
 
 const DEFAULT_NAME = "codex-dark"
 
+// Coarse-classification table for which named theme is "dark". Translucent
+// chrome is only offered on dark themes — alpha-over-light reads badly.
+const DARK_THEMES = new Set(["codex-dark", "midnight", "solarized", "forest"])
+
 function currentName(state) {
   const s = state.get().settings || {}
   return s.themeName || DEFAULT_NAME
@@ -51,17 +55,43 @@ function applyName(name) {
   document.documentElement.setAttribute("data-theme-name", name)
 }
 
+// Mirror the translucentWindow setting onto an HTML attribute so the CSS
+// variant in themes.css can opt-in surfaces with [data-translucent="true"].
+function applyTranslucentAttr(enabled) {
+  document.documentElement.setAttribute(
+    "data-translucent",
+    enabled ? "true" : "false"
+  )
+}
+
 export function initThemes(state) {
   // Apply on boot once settings load; re-apply whenever they change.
-  let last = null
+  let lastName = null
+  let lastTranslucent = null
   function maybeApply() {
-    const name = currentName(state)
-    if (name === last) return
-    last = name
-    applyName(name)
+    const s = state.get().settings || {}
+    const name = s.themeName || DEFAULT_NAME
+    const translucent = !!s.translucentWindow && DARK_THEMES.has(name)
+    if (name !== lastName) {
+      lastName = name
+      applyName(name)
+    }
+    if (translucent !== lastTranslucent) {
+      lastTranslucent = translucent
+      applyTranslucentAttr(translucent)
+    }
   }
   maybeApply()
   state.subscribe(maybeApply)
+
+  // The main process broadcasts when the setting flips (so other windows
+  // catch up too). The CSS attribute is the cheap source of truth.
+  if (window.iris && typeof window.iris.onTranslucentChanged === "function") {
+    window.iris.onTranslucentChanged(({ enabled } = {}) => {
+      const name = currentName(state)
+      applyTranslucentAttr(!!enabled && DARK_THEMES.has(name))
+    })
+  }
 
   window.addEventListener("iris:show-theme-picker", () => showThemePicker(state))
 }
@@ -114,7 +144,83 @@ export function showThemePicker(state) {
   }
   renderCards()
 
-  body.append(grid)
+  // ── Translucent window toggle ─────────────────────────────
+  //
+  // Renders an opt-in checkbox row beneath the theme grid. The row is
+  // auto-disabled on platforms without OS support (Win10, Linux), with a
+  // tooltip explaining why. The setting is also conceptually "dark themes
+  // only" — the change handler still writes the setting on a light theme
+  // so it takes effect the moment the user switches back to a dark one;
+  // applyTranslucentAttr filters by current theme so light themes never
+  // get the visual variant even if the bit is set.
+  const translucentRow = h("div", { class: "theme-translucent-row" })
+  const tCheckbox = h("input", { type: "checkbox", id: "theme-translucent-cb" })
+  const tLabel = h(
+    "label",
+    { for: "theme-translucent-cb", class: "theme-translucent-label" },
+    "Translucent window (Windows 11 / macOS)",
+  )
+  const tHint = h(
+    "div",
+    { class: "theme-translucent-hint" },
+    "Uses native Mica on Win11 or under-window vibrancy on macOS. Applied on dark themes only — light themes stay solid for readability.",
+  )
+
+  // Reflect current value while we wait for the support check.
+  tCheckbox.checked = !!(state.get().settings || {}).translucentWindow
+
+  // Gate the row on OS support. Disabled + tooltip when unsupported.
+  let supported = false
+  let supportReason = null
+  ;(async () => {
+    try {
+      const r = await (window.iris && window.iris.translucentSupported
+        ? window.iris.translucentSupported()
+        : Promise.resolve({ supported: false, reason: "Bridge unavailable" }))
+      supported = !!(r && r.supported)
+      supportReason = (r && r.reason) || null
+    } catch {
+      supported = false
+      supportReason = "Could not check OS support."
+    }
+    if (!supported) {
+      tCheckbox.disabled = true
+      const msg = supportReason
+        || "Available on Windows 11 (build 22000+) and macOS only."
+      tCheckbox.title = msg
+      tLabel.title = msg
+      translucentRow.classList.add("disabled")
+    }
+  })()
+
+  tCheckbox.addEventListener("change", async () => {
+    const checked = !!tCheckbox.checked
+    try {
+      await state.actions.saveSettings({ translucentWindow: checked })
+      // Apply immediately for the current page. The main process broadcast
+      // arrives a beat later; setting the attribute now avoids any flicker.
+      const activeName = currentName(state)
+      const okForTheme = DARK_THEMES.has(activeName)
+      document.documentElement.setAttribute(
+        "data-translucent",
+        checked && okForTheme ? "true" : "false",
+      )
+      if (checked && supported) {
+        showToast("Translucent window enabled — reopen the window to see the native material")
+      } else if (checked && !supported) {
+        showToast("Translucent saved, but your OS doesn't support it", { error: true })
+      } else {
+        showToast("Translucent window disabled")
+      }
+    } catch {
+      // Roll back the checkbox to match the persisted value.
+      tCheckbox.checked = !checked
+      showToast("Failed to save translucent setting", { error: true })
+    }
+  })
+
+  translucentRow.append(tCheckbox, tLabel, tHint)
+  body.append(grid, translucentRow)
   modal.append(header, body)
 
   const handle = openModal(modal)

@@ -1,5 +1,111 @@
 # Changelog
 
+## v0.5.2 — Rich web cards + native translucent chrome
+
+Released TBD (cut after v0.5.1).
+
+**The two final v0.5 polish moves.** Both small in code, big in "feels premium" payoff.
+
+### 6. Rich web search result cards
+
+- **When the Iris orchestrator returns a web citation**, it now emits a custom `<iris-web-result url="…" title="…">snippet</iris-web-result>` block. The renderer detects the tag and swaps in a visual card with favicon (from `https://www.google.com/s2/favicons`), title, snippet, host, and a hover-revealed "Open ↗" chip.
+- **Strict URL sanitization** in `app/js/lib/markdown.js` — only `http:` and `https:` schemes render as links. `javascript:`, `data:`, `file:`, `vbscript:` and CRLF-injection attempts are dropped silently.
+- **Plain markdown links are untouched** — this only kicks in for the explicit citation tag.
+- **CSP updated** in `app/index.html` to allow images from `https://www.google.com` (favicons only) with an inline comment explaining the narrow grant.
+- **Disclosure:** `site/safety.html` gained a new "Outbound network calls" section listing every third-party endpoint, including the favicon call.
+- **Modified:** `lib/router/prompts.md`, `app/js/lib/markdown.js`, `app/index.html`, `site/safety.html`.
+- **New files:** `app/css/web-cards.css`, `tests/markdown.test.js` (7 tests).
+
+### 7. Native Mica / Acrylic window chrome
+
+- **Translucent backdrop on Windows 11 and macOS.** Toggle in the theme picker. On Win11 (build 22000+) the window picks up Mica — wallpaper softly visible behind a tinted dark panel. On macOS, equivalent `under-window` vibrancy with active state. On Win10 / Linux the toggle is disabled with a tooltip explaining why.
+- **Dark themes only.** `[data-translucent="true"]` variants land on `codex-dark` and `midnight`; light themes stay solid because alpha-on-light reads badly. Per-token alpha was tuned for WCAG AA body text contrast over a colorful wallpaper.
+- **Code blocks, inputs, and modals stay fully opaque** so reading and editing aren't degraded.
+- **Modified:** `main.js` (createMainWindow detects platform + reads `settings.translucentWindow`, sets `backgroundMaterial`/`vibrancy` + `transparent: true` + transparent `backgroundColor` when on), `preload.js` (`iris.translucentSupported`, `iris.onTranslucentChanged`), `lib/store.js` (`translucentWindow: false` default), `app/js/ui/theme-picker.js`, `app/css/themes.css`, `app/css/components.css`.
+- **New file:** `docs/themes.md` with the full translucent-window guide and a 9-step manual verification checklist.
+
+### Under the hood
+
+- 7 new markdown tests; `node tests/run-all.js` → 14 suites, 160 tests, 100% pass.
+- No new runtime dependencies — Mica/vibrancy use Electron's built-in `BrowserWindow` options.
+
+## v0.5.1 — Custom slash commands + per-thread cost budgets
+
+Released TBD (cut after v0.5.0).
+
+**Two polish wins on top of the v0.5.0 foundation.** Both extend existing modules — no new runtime dependencies, no architectural shifts.
+
+### 4. Custom slash commands
+
+- **Define your own `/standup`, `/fix-pr`, `/journal`, `/anything`.** Each command has a trigger, name, description, and template prompt. Manage from `Settings → Custom slash commands → Manage commands…`.
+- **Template substitutions:** `{{selection}}` is replaced with whatever text was highlighted in the active textarea; `{{cursor}}` is removed but the caret lands at its original position after insert.
+- **Built-ins win on trigger collision** — a user command with a built-in's trigger is dropped from the merged list, so you can never accidentally shadow a system command.
+- **JSON export / import** for sharing a library across machines or with a team.
+- **Storage:** `settings.slashCommands` — a new collection in `lib/store.js` defaults to `[]`.
+- **New files:** `app/js/ui/slash-command-editor.js`, `tests/slash-commands.test.js`.
+- **Modified:** `app/js/ui/slash-commands.js` (merge user commands into parse/filter/execute), `app/js/ui/settings.js`, `app/js/ui/chat-view.js`.
+
+### 5. Per-thread cost budgets
+
+- **Optional dollar ceiling per agent.** Set via the new "Cost budget (USD)" field on agent creation, or via `Settings → Default cost budget (USD)` for all new agents.
+- **80% warning** — a non-blocking toast surfaces when this turn pushes the session past 80% of the budget. Fires once per session.
+- **100% modal** — a blocking dialog with three buttons: "Raise budget", "Continue once", or "Stop agent". "Stop agent" calls the existing `iris.stopAgent`; "Continue once" persists a `agentBudgetSkipByAgent[id]=true` flag in settings; "Raise budget" patches the agent record with a new ceiling.
+- **Progress bar overlay** on the cost pill — green below 70%, orange 70-100%, red above 100%.
+- **Cost math** moved into `lib/agent-manager.js` as `computeTurnCostUsd(usage, model)` — exported for testability. Tracks Sonnet/Opus/Haiku rates (per million tokens) with cache-read at 10% of base and cache-create at 125%. Unknown models fall back to Sonnet pricing — under-warning beats failing loud mid-turn.
+- **New files:** `tests/cost-tracker.test.js` (17 tests).
+- **Modified:** `lib/agent-manager.js`, `lib/store.js` (persist `costBudgetUsd` + `costBudgetAction` on each agent), `app/js/ui/cost-tracker.js`, `app/js/ui/settings.js`.
+
+### Known gap
+
+- "Continue once" surfaces the modal but does NOT hard-pause the agent — the main-process agent manager only emits the threshold events; the renderer decides. If you dismiss the modal and send another message, it will go through (the modal will pop again on the next turn). A true hard-pause is a follow-up: the agent manager would need to consult `agentBudgetSkipByAgent[id]` in its `sendMessage` path.
+
+### Under the hood
+
+- 32 new tests across 2 new suites — `node tests/run-all.js` → 14 suites pass.
+
+## v0.5.0 — Codex-parity tier-1 features
+
+Released 2026-05-25.
+
+**Three premium-tier features land in one release** — the three moves that make this feel like an "app store + dev environment + browser" instead of a chat window with a fancy sidebar.
+
+### 1. MCP Server Marketplace
+
+- **One-click install for Model Context Protocol servers.** Open `Settings → MCP Servers → Open marketplace…` to browse a curated catalog (Playwright, GitHub, Postgres, Fetch, Filesystem, Memory, Sequential-Thinking, Time). Click Install, drop in any required secrets (PATs, connection strings), and the next agent run automatically gets the new tools.
+- **Catalog refresh in the background.** Bundled catalog ships inside the app so the marketplace works offline; the remote catalog at `iris-code.pages.dev/mcp-catalog.json` refreshes on launch with a 24-hour cache. Compromised remote can update display fields but never overrides the bundled `command`/`args`.
+- **Encrypted secret vault.** Secrets ride through the same `safeStorage` / AES-256-GCM-fallback path the API key vault already uses. The per-spawn `.mcp.json` references env vars as `${NAME}` placeholders; the actual values ride in the spawn env and the file is chmod-600 + shredded after the agent process closes.
+- **New files:** `lib/mcp/{registry.js, installer.js, catalog-bundled.json}`, `app/js/ui/mcp-marketplace.js`, `app/css/mcp.css`, `tests/mcp.test.js`, `docs/mcp-marketplace.md`, `site/mcp-catalog.json`.
+
+### 2. Embedded Browser Pane
+
+- **Per-agent embedded webview** with URL bar, back/forward/refresh/external-open. Toggle from the "Browser" pill in the chat header. Each agent gets its own `partition="persist:agent-<id>"` so cookies and logins never bleed across threads.
+- **Draggable splitter** between chat and pane with persistence (`settings.browserPaneWidth`).
+- **"Send screenshot to agent"** captures the pane, saves the PNG via main-process IPC under `iris-data/screenshots/`, and drops a `Please read it: <abs path>` line into the chat composer — Claude can `Read` the file directly.
+- **Master switch in Settings** to hide the pill for users who don't want it.
+- **Limitation noted up front:** the agent cannot drive *this* pane in v0.5.0 (no CDP attach yet). Install **Playwright** from the MCP marketplace for fully agent-controlled browsing (separate Chromium). CDP-attached agent control of the embedded pane is planned for v0.5.x.
+- **New files:** `app/js/ui/browser-pane.js`, `app/css/browser-pane.css`, `docs/browser-pane.md`.
+
+### 3. Integrated Terminal Pane
+
+- **Real PTY per agent** via `node-pty` + `xterm.js`. Default shell is the platform default (PowerShell on Windows, `$SHELL` elsewhere). Terminals survive renderer reloads because the PTY lives in the main process.
+- **10,000-line ring buffer** per terminal bounds memory.
+- **"Share last 50 lines with agent"** copies the buffered output into the chat composer as a fenced code block — sharing is deliberate, not automatic, so the agent's context stays clean.
+- **Graceful disable** if `node-pty` fails to load (e.g. the native binding wasn't rebuilt for your Electron version): the Terminal pill disappears with a clear inline message instead of crashing the app.
+- **New files:** `lib/terminal/pty-manager.js`, `app/js/ui/terminal-pane.js`, `app/css/terminal-pane.css`, `tests/terminal.test.js`, `docs/terminal.md`.
+- **Native dep:** `package.json` adds `node-pty`, `xterm`, `xterm-addon-fit`, plus dev-dep `electron-rebuild`. Contributors must run `npm install` (which runs `electron-rebuild` post-install) before `npm start`. See `docs/terminal.md` if you hit `Cannot find module ... pty.node`.
+
+### Under the hood
+
+- `lib/agent-manager.js` — constructor now accepts `mcpInstaller`; on spawn it resolves the per-agent runtime config and appends `--mcp-config <path>` to argv + merges `envOverlay` into spawn env. Shred-on-close clears the file from disk.
+- `lib/store.js` — new `mcpSecrets` encrypted vault (separate JSON file so a corruption can't take down the API-key vault). New `DEFAULT_SETTINGS` keys: `mcpEnabled`, `browserPaneEnabled`, `browserPaneStateByAgent`, `terminalEnabled`.
+- `main.js` — `webviewTag: true` on the BrowserWindow; new IPC blocks `// ── IPC: MCP ──`, `// ── IPC: Terminal ──`; new `screenshot:save-data-url` handler with 8 MB cap.
+- `preload.js` — `iris.mcp`, `iris.terminal`, `iris.saveScreenshotDataUrl`.
+- 19 new tests across 2 new suites (8 MCP + 9 terminal) — `node tests/run-all.js` → 11 suites, 100% pass.
+
+### Compatibility
+
+- Pre-v0.5 settings auto-upgrade. All three new features default to ON but install nothing until the user clicks into the marketplace / toggles the pane / opens a terminal — existing users see no behavior change.
+
 ## v0.4.1 — Windows spawn race fix
 
 Released 2026-05-24.

@@ -130,3 +130,55 @@
   --accent-soft: rgba(111, 191, 115, 0.14);
   --accent-ring: rgba(111, 191, 115, 0.32);
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   Translucent window variants (v0.5 Feature 7)
+   ───────────────────────────────────────────────────────────
+   Applied only when:
+     1. The OS exposes a native material (Win11 Mica / macOS vibrancy),
+        gated in main.js + theme-picker.js.
+     2. The user has flipped settings.translucentWindow on.
+     3. The active theme is a DARK variant. Light themes are deliberately
+        excluded — rgba over a colorful wallpaper destroys contrast and
+        reads badly with dark text.
+
+   Token strategy: only --bg-0 (window background) goes fully transparent
+   so the native material shows through. --bg-1 (sidebar/header) and
+   --bg-2 (chat surface) get conservative alpha so panels still have a
+   tinted body and text hits WCAG AA contrast on a realistic wallpaper.
+   --bg-3 / --bg-4 stay solid because they back small UI like code
+   blocks, inputs, chips, and modal interiors — where translucency would
+   degrade reading without giving the visual benefit.
+   ═══════════════════════════════════════════════════════════ */
+
+:root[data-translucent="true"][data-theme-name="codex-dark"] {
+  --bg-0: transparent;
+  --bg-1: rgba(17, 17, 22, 0.75);
+  --bg-2: rgba(23, 23, 30, 0.85);
+  /* --bg-3 and --bg-4 stay solid (see comment above) */
+}
+
+:root[data-translucent="true"][data-theme-name="midnight"] {
+  --bg-0: transparent;
+  --bg-1: rgba(12, 14, 22, 0.75);
+  --bg-2: rgba(19, 22, 35, 0.85);
+}
+
+/* Keep critical reading surfaces fully opaque even when translucency is
+   on. These live in :root scope so they apply regardless of theme. */
+[data-translucent="true"] .modal,
+[data-translucent="true"] pre,
+[data-translucent="true"] pre code,
+[data-translucent="true"] input,
+[data-translucent="true"] textarea {
+  background: var(--bg-3) !important;
+}
+
+/* The HTML body itself must be transparent on translucent builds or the
+   solid fill from tokens.css's html/body rule paints over the OS material
+   regardless of how many bg-0 overrides we add. */
+[data-translucent="true"],
+[data-translucent="true"] body {
+  background: transparent !important;
+}

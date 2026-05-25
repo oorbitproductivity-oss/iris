@@ -1,7 +1,7 @@
 {
   "name": "iris-code",
-  "version": "0.4.1",
-  "description": "Open-source premium GUI for Claude Code with parallel sub-agents and Telegram bridge.",
+  "version": "0.5.0",
+  "description": "Open-source premium GUI for Claude Code with parallel sub-agents, MCP marketplace, embedded browser pane, integrated terminal, and Telegram bridge.",
   "main": "main.js",
   "bin": {
     "iris": "bin/iris.js"
@@ -12,6 +12,7 @@
     "iris": "node bin/iris.js",
     "test": "node tests/run-all.js",
     "test:smoke": "node smoke-test.js",
+    "postinstall": "node tools/copy-xterm.js && electron-rebuild -f -w node-pty || true",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win nsis --x64",
     "dist:win:arm64": "electron-builder --win nsis --arm64",
@@ -21,11 +22,15 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",
-    "ws": "^8.18.0"
+    "node-pty": "^1.0.0",
+    "ws": "^8.18.0",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
     "electron": "^33.0.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "electron-rebuild": "^3.2.9"
   },
   "build": {
     "appId": "com.oorbitproductivity.iriscode",
@@ -38,6 +43,7 @@
       "lib/**/*",
       "bin/**/*",
       "app/**/*",
+      "tools/**/*",
       "!app/assets/icon-preview.html",
       "!**/*.map",
       "!**/.DS_Store",

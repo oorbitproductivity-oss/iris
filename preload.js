@@ -114,6 +114,7 @@ contextBridge.exposeInMainWorld("iris", {
 
   // ── Screenshot ──
   captureScreenshot: () => ipcRenderer.invoke("screenshot:capture"),
+  saveScreenshotDataUrl: (dataUrl) => ipcRenderer.invoke("screenshot:save-data-url", dataUrl),
   onScreenshot: (cb) => {
     const listener = (_e, payload) => cb(payload);
     ipcRenderer.on("ui:screenshot-taken", listener);
@@ -123,6 +124,56 @@ contextBridge.exposeInMainWorld("iris", {
     const listener = (_e, payload) => cb(payload);
     ipcRenderer.on("ui:screenshot-error", listener);
     return () => ipcRenderer.removeListener("ui:screenshot-error", listener);
+  },
+
+  // ── MCP marketplace ──
+  mcp: {
+    catalog: (opts) => ipcRenderer.invoke("mcp:catalog", opts || {}),
+    installs: () => ipcRenderer.invoke("mcp:installs"),
+    install: (opts) => ipcRenderer.invoke("mcp:install", opts || {}),
+    uninstall: (id) => ipcRenderer.invoke("mcp:uninstall", id),
+  },
+
+  // ── Integrated terminal (v0.5 Feature 3) ──
+  // PTY events ride on the existing "agent:event" broadcast channel so we
+  // don't have to plumb a second pipe; onData/onExit filter by event.type.
+  terminal: {
+    available: () => ipcRenderer.invoke("terminal:available"),
+    create: (opts) => ipcRenderer.invoke("terminal:create", opts || {}),
+    list: (opts) => ipcRenderer.invoke("terminal:list", opts || {}),
+    history: (terminalId, lines) =>
+      ipcRenderer.invoke("terminal:history", { terminalId, lines }),
+    write: (terminalId, data) =>
+      ipcRenderer.send("terminal:write", { terminalId, data }),
+    resize: (terminalId, cols, rows) =>
+      ipcRenderer.send("terminal:resize", { terminalId, cols, rows }),
+    kill: (terminalId) => ipcRenderer.send("terminal:kill", terminalId),
+    onData: (cb) => {
+      const listener = (_e, payload) => {
+        if (payload && payload.type === "terminal:data") cb(payload);
+      };
+      ipcRenderer.on("agent:event", listener);
+      return () => ipcRenderer.removeListener("agent:event", listener);
+    },
+    onExit: (cb) => {
+      const listener = (_e, payload) => {
+        if (payload && payload.type === "terminal:exit") cb(payload);
+      };
+      ipcRenderer.on("agent:event", listener);
+      return () => ipcRenderer.removeListener("agent:event", listener);
+    },
+  },
+
+  // ── Translucent window (v0.5 Feature 7) ──
+  // Async invoke avoids needing a sync IPC pathway in the renderer; the
+  // result is { supported: bool, reason: string|null }. The theme picker
+  // awaits this on mount to decide whether to show the option as enabled
+  // or as a disabled checkbox with an explanatory tooltip.
+  translucentSupported: () => ipcRenderer.invoke("translucent:support"),
+  onTranslucentChanged: (cb) => {
+    const listener = (_e, payload) => cb(payload);
+    ipcRenderer.on("ui:translucent-changed", listener);
+    return () => ipcRenderer.removeListener("ui:translucent-changed", listener);
   },
 
   // ── Misc ──

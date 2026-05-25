@@ -6,6 +6,8 @@ import { showSessionSettingsModal } from "./session-settings.js";
 import { createRotator, shortElapsed, pickWord, THINKING, DOING } from "../lib/verbs.js";
 import { COMMANDS, MODELS, filter as filterCommands, execute as executeSlash } from "./slash-commands.js";
 import { isExitPlanModeTool, renderPlanCard, patchPlanCard } from "./plan-mode.js";
+import { getBrowserPaneToggle } from "./browser-pane.js";
+import { getTerminalPaneToggle } from "./terminal-pane.js";
 
 const MILESTONE_FAST_MS = 30 * 1000;   // first 3 minutes: one line every 30s
 const MILESTONE_SLOW_MS = 60 * 1000;   // after 3 minutes: one line every 60s
@@ -118,7 +120,25 @@ export function mountChatView(rootEl, state) {
     const id = state.get().activeId;
     if (id) showSessionSettingsModal(state, id);
   });
-  headerActions.append(modelPill, statusPill, stopBtn, expandAllBtn, collapseAllBtn, scrollBottomBtn, fsBtn, cogBtn);
+  // v0.5: "Browser" pill — toggles the embedded browser pane. Hidden for the
+  // Iris orchestrator (no pane) and when settings.browserPaneEnabled is off.
+  // getBrowserPaneToggle returns null in those cases.
+  const activeAgentIdForToggle = state.get().activeId;
+  let browserToggle = null;
+  try { browserToggle = getBrowserPaneToggle(activeAgentIdForToggle); }
+  catch (err) { console.error("[chat-view] browser toggle init failed", err); }
+
+  // v0.5 Feature 3: "Terminal" pill — toggles the integrated terminal pane.
+  // Hidden for Iris and when settings.terminalEnabled is off / node-pty
+  // failed to load; getTerminalPaneToggle returns null in those cases.
+  let terminalToggle = null;
+  try { terminalToggle = getTerminalPaneToggle(activeAgentIdForToggle); }
+  catch (err) { console.error("[chat-view] terminal toggle init failed", err); }
+
+  headerActions.append(modelPill, statusPill);
+  if (browserToggle) headerActions.append(browserToggle);
+  if (terminalToggle) headerActions.append(terminalToggle);
+  headerActions.append(stopBtn, expandAllBtn, collapseAllBtn, scrollBottomBtn, fsBtn, cogBtn);
   header.append(headerMark, headerText, headerActions);
 
   // ── Scroll log ─────────────────────────────────────────
@@ -233,7 +253,7 @@ export function mountChatView(rootEl, state) {
   function refreshSlash() {
     const v = textarea.value;
     if (!v.startsWith("/")) { slashMatches = []; slashPop.hidden = true; return; }
-    slashMatches = filterCommands(v);
+    slashMatches = filterCommands(v, state);
     if (slashSelectedIdx >= slashMatches.length) slashSelectedIdx = 0;
     if (slashSelectedIdx < 0) slashSelectedIdx = 0;
     renderSlashPop();

@@ -257,8 +257,56 @@
           </div>
           <div class="pillar reveal">
             <h3>No telemetry, no account</h3>
-            <p>The app never phones home. Your Claude API key, your conversations, and your project files all stay on your machine — and the encrypted vault uses Windows DPAPI.</p>
+            <p>The app never phones home with analytics, crash reports, or usage data. Your Claude API key, your conversations, and your project files all stay on your machine — and the encrypted vault uses Windows DPAPI.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         OUTBOUND NETWORK CALLS — full disclosure
+         ============================================================ -->
+    <section class="section section--tight" id="outbound-calls">
+      <div class="container">
+        <header class="reveal" style="margin-bottom: var(--s-3)">
+          <span class="section-eyebrow">Full disclosure</span>
+          <h2 style="font-size: 1.4rem;">Every outbound network call the app makes</h2>
+          <p style="color: var(--text-secondary)">
+            "No telemetry" means we don't track you — not that the app never opens a socket.
+            Here is every third‑party endpoint Iris Code talks to, and exactly when, so you can
+            verify it with a packet sniffer or your firewall logs.
+          </p>
+        </header>
+
+        <div class="pillar reveal" style="margin-top: var(--s-4)">
+          <h3>api.anthropic.com</h3>
+          <p>Every chat turn. The Claude Code CLI sends your prompt + context to Anthropic and
+            streams the model response back. This is the core function of the app — without it
+            there is no agent. Uses your own API key or Pro/Max subscription session.</p>
+        </div>
+
+        <div class="pillar reveal" style="margin-top: var(--s-3)">
+          <h3>iris-code.dev/latest.json</h3>
+          <p>Once per launch (best‑effort, never blocks startup). Returns the latest published
+            version + download URL so the update banner can light up when a newer release is out.
+            Disable by blocking the host in your firewall — the app just won't show the banner.</p>
+        </div>
+
+        <div class="pillar reveal" style="margin-top: var(--s-3)">
+          <h3>www.google.com/s2/favicons</h3>
+          <p>Per visible web‑result card. When the orchestrator returns a web search citation,
+            the renderer shows a rich card with a 20×20 favicon fetched from Google's public
+            <code>s2/favicons</code> endpoint, scoped by the citation's hostname. The request
+            sends the cited site's domain to Google (no user identifier, no API key). Block the
+            host or run offline and the cards still work — they just render with an empty icon
+            box. Source: <code>app/css/web-cards.css</code> + <code>app/js/lib/markdown.js</code>.</p>
+        </div>
+
+        <div class="pillar reveal" style="margin-top: var(--s-3)">
+          <h3>Optional integrations (off unless you enable them)</h3>
+          <p>Telegram bot API (only when you pair a bot), the MCP marketplace catalog (only when
+            MCP is enabled), and any user‑configured remote access listener you choose to expose.
+            None of these run by default.</p>
         </div>
       </div>
     </section>

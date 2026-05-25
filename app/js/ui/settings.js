@@ -554,6 +554,169 @@ export function showSettingsModal(state) {
     telegramField.append(h("div", { class: "hint" },
       "DM your personal bot to run agent tasks on this PC from your phone."));
 
+    // ── MCP servers ─────────────────────────────────────
+    const mcpField = h("div", { class: "field" });
+    mcpField.append(h("label", { class: "label" }, "MCP servers"));
+    mcpField.append(h("div", { class: "hint", style: { marginTop: "0", marginBottom: "8px" } },
+      "Install and manage Model Context Protocol servers — extensions that give your agents new tools."));
+    const mcpBtn = h("button", { class: "btn btn-ghost", type: "button" });
+    mcpBtn.append(svgIcon("arrowRight", 14), h("span", { style: { marginLeft: "6px" } }, "Open marketplace…"));
+    mcpBtn.addEventListener("click", () => {
+      import("./mcp-marketplace.js")
+        .then((m) => {
+          try { m.openMcpMarketplace(state); }
+          catch (err) {
+            console.error("[settings] failed to open MCP marketplace", err);
+            showToast("Couldn't open the marketplace", { error: true });
+          }
+        })
+        .catch((err) => {
+          console.error("[settings] failed to load mcp-marketplace.js", err);
+          showToast("Couldn't load the marketplace module", { error: true });
+        });
+    });
+    mcpField.append(mcpBtn);
+
+    // Live list of installs — refreshed each time the modal opens. Uses the
+    // catalog (for display names) joined with the install records.
+    const mcpListBox = h("div", { class: "mcp-installed-list-host" });
+    mcpField.append(mcpListBox);
+
+    async function refreshMcpInstalls() {
+      if (!window.iris || !window.iris.mcp) {
+        mcpListBox.innerHTML = "";
+        mcpListBox.append(h("div", { class: "mcp-installed-list-empty" },
+          "MCP marketplace unavailable in this build."));
+        return;
+      }
+      let installs = [];
+      let catalog = null;
+      try {
+        installs = await window.iris.mcp.installs();
+      } catch (err) {
+        console.error("[settings] mcp.installs() failed", err);
+      }
+      try {
+        // Use the cached catalog (refresh:false) so we don't refetch the
+        // registry every time settings opens. The main process already keeps
+        // it warm after the first marketplace visit.
+        catalog = await window.iris.mcp.catalog({ refresh: false });
+      } catch (err) {
+        console.error("[settings] mcp.catalog() failed", err);
+      }
+      const slugToName = new Map();
+      if (catalog && Array.isArray(catalog.servers)) {
+        for (const s of catalog.servers) {
+          if (s && s.slug) slugToName.set(s.slug, s.name || s.slug);
+        }
+      }
+      mcpListBox.innerHTML = "";
+      if (!Array.isArray(installs) || !installs.length) {
+        mcpListBox.append(h("div", { class: "mcp-installed-list-empty" },
+          "No MCP servers installed yet."));
+        return;
+      }
+      const list = h("ul", { class: "mcp-installed-list" });
+      for (const inst of installs) {
+        if (!inst || !inst.slug) continue;
+        const display = slugToName.get(inst.slug) || inst.slug;
+        const scopeLabel = inst.scope === "global"
+          ? "global"
+          : (inst.scope && inst.scope.startsWith("agent:") ? "per-agent" : String(inst.scope || ""));
+        list.append(h("li", null, `${display} (${scopeLabel})`));
+      }
+      mcpListBox.append(list);
+    }
+    // Trigger an initial refresh — fires once on settings open.
+    setTimeout(refreshMcpInstalls, 0);
+
+    // ── Custom slash commands (v0.5 Feature 4) ──────────
+    const slashField = h("div", { class: "field" });
+    slashField.append(h("label", { class: "label" }, "Custom slash commands"));
+    slashField.append(h("div", { class: "hint", style: { marginTop: "0", marginBottom: "8px" } },
+      "Define your own /commands with reusable prompt templates. " +
+      "Use {{selection}} to inline the composer's selected text, {{cursor}} to place the caret."));
+    const slashCountText = h("span", { style: { opacity: "0.65", fontSize: "0.85rem" } },
+      (() => {
+        const n = Array.isArray(settings.slashCommands) ? settings.slashCommands.length : 0;
+        return `${n} command${n === 1 ? "" : "s"} configured`;
+      })());
+    const slashBtnRow = h("div", { style: { display: "flex", gap: "10px", alignItems: "center" } });
+    const slashBtn = h("button", { class: "btn btn-ghost", type: "button" });
+    slashBtn.append(svgIcon("arrowRight", 14), h("span", { style: { marginLeft: "6px" } }, "Manage commands…"));
+    slashBtn.addEventListener("click", () => {
+      import("./slash-command-editor.js")
+        .then((m) => {
+          try { m.openSlashCommandEditor(state); }
+          catch (err) {
+            console.error("[settings] open slash command editor failed", err);
+            showToast("Couldn't open the editor", { error: true });
+          }
+          // Refresh the count after the editor closes — naive: re-read settings
+          // on the next state change.
+          const unsub = state.subscribe(() => {
+            const s2 = state.get().settings || {};
+            const n = Array.isArray(s2.slashCommands) ? s2.slashCommands.length : 0;
+            slashCountText.textContent = `${n} command${n === 1 ? "" : "s"} configured`;
+          });
+          // Auto-unsubscribe a few seconds later so we don't leak listeners.
+          setTimeout(() => { try { unsub(); } catch {} }, 60_000);
+        })
+        .catch((err) => {
+          console.error("[settings] failed to load slash-command-editor.js", err);
+          showToast("Couldn't load the editor", { error: true });
+        });
+    });
+    slashBtnRow.append(slashBtn, slashCountText);
+    slashField.append(slashBtnRow);
+
+    // ── Default cost budget (v0.5 Feature 5) ────────────
+    const budgetField = h("div", { class: "field" });
+    budgetField.append(h("label", { class: "label" }, "Default cost budget (USD)"));
+    const budgetRow = h("div", { class: "field-row" });
+    const budgetInput = h("input", {
+      class: "input",
+      type: "number",
+      min: "0",
+      step: "0.01",
+      placeholder: "e.g. 5.00",
+      value: settings.defaultCostBudgetUsd != null ? String(settings.defaultCostBudgetUsd) : "",
+      style: { maxWidth: "160px" },
+    });
+    budgetRow.append(budgetInput);
+    budgetField.append(budgetRow);
+    budgetField.append(h("div", { class: "hint" },
+      "Applied to every newly-created thread. Leave blank for no ceiling. " +
+      "At 80% you get a toast; at 100% the thread pauses for confirmation before the next turn."));
+
+    // ── Browser pane (v0.5) ─────────────────────────────
+    const browserPaneField = h("div", { class: "field" });
+    browserPaneField.append(h("label", { class: "label" }, "Browser pane"));
+    const browserPaneRow = h("label", {
+      style: { display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", padding: "6px 0" },
+    });
+    const browserPaneCheck = h("input", { type: "checkbox" });
+    // Treat undefined as enabled (default true), matching store defaults.
+    browserPaneCheck.checked = settings.browserPaneEnabled !== false;
+    browserPaneRow.append(
+      browserPaneCheck,
+      h("span", null, "Enable embedded browser pane on worker agents."),
+    );
+    browserPaneField.append(browserPaneRow);
+    browserPaneField.append(h("div", { class: "hint" },
+      "Adds a Browser pill to the chat header that opens a side webview with " +
+      "per-agent cookie isolation. Disable to hide the toggle everywhere."));
+    // Persist the flag the moment it flips — the toggle should disappear /
+    // reappear immediately, not wait for the Save button at the bottom of
+    // the modal.
+    browserPaneCheck.addEventListener("change", async () => {
+      try {
+        await state.actions.saveSettings({ browserPaneEnabled: !!browserPaneCheck.checked });
+      } catch (err) {
+        showToast("Failed to save browser pane setting", { error: true });
+      }
+    });
+
     body.append(
       modeField,
       cwdField,
@@ -567,6 +730,10 @@ export function showSettingsModal(state) {
       themeField,
       remoteField,
       telegramField,
+      mcpField,
+      slashField,
+      budgetField,
+      browserPaneField,
     );
 
     // Footer
@@ -596,6 +763,13 @@ export function showSettingsModal(state) {
           permissionMode: permCheck.checked ? "bypassPermissions" : "acceptEdits",
           spotlightHotkey: (spotInput.value || "").trim() || "CommandOrControl+Shift+I",
           defaultApiKeyId: currentDefaultKeyId,
+          // v0.5 Feature 5: default per-thread cost budget. Blank input → null.
+          defaultCostBudgetUsd: (() => {
+            const raw = (budgetInput.value || "").trim();
+            if (!raw) return null;
+            const n = Number(raw);
+            return Number.isFinite(n) && n >= 0 ? n : null;
+          })(),
         };
         await state.actions.saveSettings(patch);
         showToast("Settings saved");

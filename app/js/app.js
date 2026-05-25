@@ -30,6 +30,9 @@ import { initPlanMode } from "./ui/plan-mode.js";
 import { initUpdateCheck } from "./ui/update-banner.js";
 import { openScreenshotModal } from "./ui/screenshot-modal.js";
 import { initHotkeyConflicts } from "./ui/hotkey-conflicts.js";
+import { initMcpMarketplace } from "./ui/mcp-marketplace.js";
+import { initBrowserPane } from "./ui/browser-pane.js";
+import { initTerminalPane } from "./ui/terminal-pane.js";
 
 // Top-level error visibility: in packaged builds DevTools is closed, so a
 // silent renderer crash leaves the user staring at a blank page. Paint any
@@ -345,6 +348,9 @@ async function boot() {
   try { initPlanMode(state); } catch (e) { console.error("[app] plan mode init failed", e); }
   try { initUpdateCheck(state); } catch (e) { console.error("[app] update check init failed", e); }
   try { initTour(state); } catch (e) { console.error("[app] tour init failed", e); }
+  try { initMcpMarketplace(state); } catch (e) { console.error("[mcp-marketplace] init failed:", e); }
+  try { initBrowserPane(state); } catch (e) { console.error("[app] browser pane init failed", e); }
+  try { initTerminalPane(state); } catch (e) { console.error("[app] terminal pane init failed", e); }
 
   // Bridge custom-events fired by the command palette (and the tour) to the
   // matching show… modal functions. Listeners are idempotent — registering

@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; font-src 'self' data:;" />
+    <!-- img-src extended to allow the favicon endpoint used by rich web-result
+         cards (see app/css/web-cards.css + app/js/lib/markdown.js). Restricted
+         to the s2 favicon service only; no other Google subdomains. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://www.google.com; font-src 'self' data:;" />
     <title>Iris Code</title>
     <link rel="icon" type="image/png" href="assets/iris-icon.png" />
     <link rel="stylesheet" href="css/tokens.css" />
@@ -13,6 +16,10 @@
     <link rel="stylesheet" href="css/themes.css" />
     <link rel="stylesheet" href="css/features-v3.css" />
     <link rel="stylesheet" href="css/features-v3-b.css" />
+    <link rel="stylesheet" href="css/mcp.css" />
+    <link rel="stylesheet" href="css/browser-pane.css" />
+    <link rel="stylesheet" href="css/terminal-pane.css" />
+    <link rel="stylesheet" href="css/web-cards.css" />
   </head>
   <body>
     <div id="titlebar">

@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-24",
+  "servers": [
+    {
+      "slug": "playwright",
+      "name": "Playwright",
+      "category": "browser",
+      "description": "Drive a real Chromium browser: navigate, click, fill, screenshot. Powers Iris's embedded browser pane.",
+      "publisher": "Microsoft",
+      "homepage": "https://github.com/microsoft/playwright-mcp",
+      "installCount": 142000,
+      "tags": ["browser", "automation", "scraping"],
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {},
+      "secrets": [],
+      "prereqs": ["Node.js 18+", "Will download a Chromium binary on first run (~150 MB)."],
+      "featured": true
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "category": "dev-tools",
+      "description": "Read and write GitHub repos: open issues, list PRs, comment, search code, manage workflows.",
+      "publisher": "GitHub",
+      "homepage": "https://github.com/github/github-mcp-server",
+      "installCount": 98000,
+      "tags": ["github", "git", "issues", "pull-requests"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "secrets": [
+        {
+          "key": "GITHUB_PERSONAL_ACCESS_TOKEN",
+          "label": "GitHub Personal Access Token",
+          "hint": "Create one at github.com/settings/tokens — scopes: repo, read:user, workflow",
+          "required": true
+        }
+      ],
+      "prereqs": ["Node.js 18+"],
+      "featured": true
+    },
+    {
+      "slug": "postgres",
+      "name": "Postgres",
+      "category": "database",
+      "description": "Query Postgres databases: list schemas, run SELECTs, inspect tables and indexes. Read-only by default.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/postgres",
+      "installCount": 47000,
+      "tags": ["database", "sql", "postgres"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${POSTGRES_URL}"],
+      "env": {
+        "POSTGRES_URL": "${POSTGRES_URL}"
+      },
+      "secrets": [
+        {
+          "key": "POSTGRES_URL",
+          "label": "Postgres connection URL",
+          "hint": "postgresql://user:pass@host:5432/dbname",
+          "required": true
+        }
+      ],
+      "prereqs": ["Node.js 18+"],
+      "featured": false
+    },
+    {
+      "slug": "fetch",
+      "name": "Fetch",
+      "category": "web",
+      "description": "Fetch the raw contents of any HTTP(S) URL and convert HTML to markdown for the agent to read.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+      "installCount": 76000,
+      "tags": ["web", "http", "scraping"],
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "env": {},
+      "secrets": [],
+      "prereqs": ["uv (Python package runner) — install: pip install uv"],
+      "featured": false
+    },
+    {
+      "slug": "filesystem",
+      "name": "Filesystem",
+      "category": "system",
+      "description": "Browse and edit files in additional directories outside the agent's working directory.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+      "installCount": 53000,
+      "tags": ["files", "filesystem"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${ALLOWED_DIR}"],
+      "env": {},
+      "secrets": [],
+      "config": [
+        {
+          "key": "ALLOWED_DIR",
+          "label": "Allowed directory",
+          "hint": "Absolute path the MCP server is allowed to read/write under",
+          "required": true,
+          "type": "path"
+        }
+      ],
+      "prereqs": ["Node.js 18+"],
+      "featured": false
+    },
+    {
+      "slug": "memory",
+      "name": "Memory",
+      "category": "ai",
+      "description": "Long-term knowledge graph the agent can write to and recall across conversations.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+      "installCount": 41000,
+      "tags": ["memory", "knowledge-graph"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {},
+      "secrets": [],
+      "prereqs": ["Node.js 18+"],
+      "featured": false
+    },
+    {
+      "slug": "sequential-thinking",
+      "name": "Sequential Thinking",
+      "category": "ai",
+      "description": "Structured step-by-step reasoning tool the agent can call before answering hard questions.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+      "installCount": 38000,
+      "tags": ["reasoning", "planning"],
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "env": {},
+      "secrets": [],
+      "prereqs": ["Node.js 18+"],
+      "featured": false
+    },
+    {
+      "slug": "time",
+      "name": "Time",
+      "category": "utility",
+      "description": "Get the current time in any IANA timezone and convert between timezones.",
+      "publisher": "Anthropic",
+      "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+      "installCount": 22000,
+      "tags": ["time", "timezone", "utility"],
+      "command": "uvx",
+      "args": ["mcp-server-time"],
+      "env": {},
+      "secrets": [],
+      "prereqs": ["uv (Python package runner) — install: pip install uv"],
+      "featured": false
+    }
+  ]
+}
